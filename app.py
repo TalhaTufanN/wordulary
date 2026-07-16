@@ -5,7 +5,7 @@ import shutil
 import tempfile
 import uuid
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, Header, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -33,6 +33,14 @@ MAX_UPLOAD_BYTES = 1 * 1024 * 1024  # 1 MB
 MIN_WORDS = 50  # Quiz 50 soruluk - bundan azi ile uretilemez.
 MAX_WORDS = 1000  # Patolojik bir dosya bir worker'i mesgul etmesin.
 
+# BYOK (bring your own key): herkese acik kurulumda her kullanici kendi DeepL
+# anahtarini getirir. Boylece kota, maliyet ve kotuye kullanim yuzeyi ortadan
+# kalkar - hesap, rate limit veya bot korumasi gerekmez.
+#
+# Kapaliyken (varsayilan) sunucu .env'deki anahtara duser; self-host ve lokal
+# gelistirme boylece hic degismeden calisir.
+REQUIRE_USER_KEY = os.environ.get("TESTMAKER_REQUIRE_USER_KEY", "").lower() in ("1", "true", "yes")
+
 os.makedirs(os.path.join(BASE_DIR, "static"), exist_ok=True)
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 
@@ -42,16 +50,40 @@ async def health():
     return {"status": "ok"}
 
 
+@app.get("/api/config")
+async def get_config():
+    """Frontend'in anahtar alanini gosterip gostermeyecegini belirler."""
+    return {"require_user_key": REQUIRE_USER_KEY}
+
+
 @app.get("/")
 async def get_index():
     return FileResponse(os.path.join(BASE_DIR, "static", "index.html"))
 
 
+@app.get("/privacy/")
+@app.get("/privacy")
+async def get_privacy():
+    return FileResponse(os.path.join(BASE_DIR, "static", "privacy.html"))
+
+
 # NOT: bu endpoint bilerek `def` (async degil). Icindeki ceviri ve PDF uretimi
 # senkron ve I/O-bound; `async def` olsaydi event loop'u bloklar ve tek bir
 # istek tum sunucuyu durdururdu. `def` olunca FastAPI bunu threadpool'da calistirir.
+#
+# Anahtar HEADER ile alinir, query string ile degil: query string'ler sunucu ve
+# proxy loglarina duser. Bu degisken asla loglanmaz, diske yazilmaz, cache'lenmez -
+# istekle gelir, istekle olur.
 @app.post("/api/process")
-def process_file(file: UploadFile = File(...)):
+def process_file(
+    file: UploadFile = File(...),
+    x_deepl_api_key: str | None = Header(default=None),
+):
+    user_key = (x_deepl_api_key or "").strip() or None
+
+    if REQUIRE_USER_KEY and not user_key:
+        raise HTTPException(status_code=401, detail="A DeepL API key is required.")
+
     if not file.filename or not file.filename.lower().endswith(".txt"):
         raise HTTPException(status_code=400, detail="Only .txt files are allowed")
 
@@ -74,7 +106,7 @@ def process_file(file: UploadFile = File(...)):
                 status_code=400, detail=f"The file must contain at most {MAX_WORDS} words."
             )
 
-        translations = translate_words(entries)
+        translations = translate_words(entries, api_key=user_key)
 
         word_list_name = f"word_list_{uuid.uuid4().hex}.pdf"
         quiz_name = f"quiz_{uuid.uuid4().hex}.pdf"
@@ -98,17 +130,29 @@ def process_file(file: UploadFile = File(...)):
     except TranslationError as e:
         # Kullanicinin uzerine islem yapabilecegi hatalar (gecersiz anahtar,
         # dolu kota) oldugu gibi iletilir.
-        raise HTTPException(status_code=502, detail=str(e))
+        raise HTTPException(status_code=502, detail=_scrub(str(e), user_key))
     except HTTPException:
         raise
     except Exception as e:
         # Beklenmeyen hatanin detayi disariya sizmamali - loglanir, kullaniciya
-        # genel mesaj doner.
-        print(f"Error processing file: {e!r}")
+        # genel mesaj doner. Log'a giden metin de anahtardan arindirilir:
+        # kullanicinin anahtari asla diske yazilmamali.
+        print(f"Error processing file: {_scrub(repr(e), user_key)}")
         raise HTTPException(status_code=500, detail="An unexpected error occurred while processing the file.")
     finally:
         if os.path.exists(temp_file_path):
             os.remove(temp_file_path)
+
+
+def _scrub(text: str, secret: str | None) -> str:
+    """Kullanicinin API anahtarini metinden temizler.
+
+    Ucuncu parti kutuphanelerin istisna mesajlarina neyi koydugunu garanti
+    edemeyiz. Bu, anahtarin log'a veya HTTP cevabina sizmamasi icin son savunma.
+    """
+    if secret and len(secret) >= 8 and secret in text:
+        return text.replace(secret, "***")
+    return text
 
 
 def _save_upload(file: UploadFile, destination: str):

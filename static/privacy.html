@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gizlilik Politikası | TestMaker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/style.css" />
+    <style>
+      body {
+        align-items: flex-start;
+      }
+      .container {
+        max-width: 760px;
+        padding: 4rem 2rem;
+      }
+      .legal h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 2.25rem 0 0.75rem;
+      }
+      .legal h2:first-child {
+        margin-top: 0;
+      }
+      .legal p,
+      .legal li {
+        color: var(--text-secondary);
+        line-height: 1.7;
+        margin-bottom: 0.75rem;
+      }
+      .legal ul {
+        padding-left: 1.25rem;
+        margin-bottom: 0.75rem;
+      }
+      .legal strong {
+        color: var(--text-primary);
+        font-weight: 600;
+      }
+      .legal a {
+        color: var(--accent-primary);
+        text-decoration: none;
+      }
+      .legal a:hover {
+        text-decoration: underline;
+      }
+      .updated {
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        opacity: 0.7;
+        margin-bottom: 2rem;
+      }
+      .callout {
+        background: rgba(16, 185, 129, 0.08);
+        border: 1px solid rgba(16, 185, 129, 0.25);
+        border-radius: 12px;
+        padding: 1.25rem;
+        margin: 1.5rem 0;
+      }
+      .callout p:last-child {
+        margin-bottom: 0;
+      }
+      .back {
+        display: inline-block;
+        margin-bottom: 2rem;
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.9rem;
+      }
+      .back:hover {
+        color: var(--text-primary);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="background-mesh">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+    </div>
+
+    <button id="lang-btn" class="lang-btn" type="button" aria-label="Language">
+      TR
+    </button>
+
+    <main class="container">
+      <a href="/" class="back" data-i18n="backHome">← TestMaker'a dön</a>
+
+      <header class="header" style="margin-bottom: 1rem">
+        <h1 data-i18n="title" style="font-size: 2.5rem">Gizlilik Politikası</h1>
+      </header>
+      <p class="updated" data-i18n="updated">Son güncelleme: 17 Temmuz 2026</p>
+
+      <section class="card glassmorphism legal">
+        <div data-i18n="body">
+          <h2>Kısaca</h2>
+          <div class="callout">
+            <p>
+              <strong
+                >TestMaker hesap açmanızı istemez, sizi takip etmez ve
+                yüklediğiniz dosyayı saklamaz.</strong
+              >
+              DeepL API anahtarınız yalnızca o anki çeviri isteği için kullanılır;
+              sunucumuzda hiçbir zaman saklanmaz, kaydedilmez veya loglanmaz.
+            </p>
+          </div>
+
+          <h2>DeepL API anahtarınız</h2>
+          <p>
+            TestMaker çeviri için <strong>sizin kendi DeepL anahtarınızı</strong>
+            kullanır. Bu bilinçli bir tercihtir: kota sizin, maliyet sizde, ve
+            bizim sizden hesap açmanızı veya kimlik doğrulamanızı istememize
+            gerek kalmaz.
+          </p>
+          <p>Anahtarınıza ne olduğu:</p>
+          <ul>
+            <li>
+              Tarayıcınızdan sunucumuza <strong>HTTPS üzerinden</strong>, URL'de
+              değil istek başlığında gönderilir (URL'ler sunucu ve ara sunucu
+              loglarına düşer, başlıklar düşmez).
+            </li>
+            <li>
+              Sunucumuzda yalnızca bellekte, yalnızca o isteğin süresince tutulur.
+              <strong>Veritabanına yazılmaz, diske kaydedilmez, önbelleğe
+              alınmaz.</strong>
+            </li>
+            <li>
+              Hata mesajlarından ve loglardan <strong>ayıklanır</strong>, böylece
+              beklenmedik bir hata durumunda dahi kayıtlara geçmez.
+            </li>
+            <li>İstek bittiğinde yok olur.</li>
+          </ul>
+          <p>
+            "Bu cihazda hatırla" seçeneğini işaretlerseniz anahtarınız
+            <strong>yalnızca kendi tarayıcınızın</strong> yerel deposunda
+            (<code>localStorage</code>) saklanır — bize gönderilmez, orada kalmaz.
+            "Kayıtlı anahtarı sil" ile istediğiniz an kaldırabilirsiniz.
+          </p>
+
+          <h2>Yüklediğiniz dosya</h2>
+          <p>
+            <code>.txt</code> dosyanız işlenmek üzere geçici olarak diske yazılır
+            ve <strong>istek biter bitmez silinir</strong> — başarılı olsun ya da
+            olmasın. Dosyanızın içeriği saklanmaz, analiz edilmez, üçüncü
+            taraflarla paylaşılmaz.
+          </p>
+
+          <h2>Üretilen PDF'ler</h2>
+          <p>
+            Kelime listesi ve test PDF'leri sunucumuzda tahmin edilemez, rastgele
+            adlarla oluşturulur ve <strong>kısa süre sonra otomatik olarak
+            silinir</strong>. Bağlantılar tahmin edilemez olduğu için başkalarının
+            sizin dosyalarınıza ulaşması pratikte mümkün değildir, ancak bunlar
+            gizli belgeler için tasarlanmamıştır — indirdikten sonra saklamanızı
+            öneririz.
+          </p>
+
+          <h2>Üçüncü taraflar</h2>
+          <ul>
+            <li>
+              <strong>DeepL SE</strong> — kelimeleriniz çeviri için DeepL'e
+              gönderilir. Bu, sizin kendi anahtarınızla ve sizin DeepL ile olan
+              anlaşmanız kapsamında gerçekleşir. DeepL'in gizlilik politikası:
+              <a href="https://www.deepl.com/privacy" target="_blank" rel="noopener"
+                >deepl.com/privacy</a
+              >.
+            </li>
+            <li>
+              <strong>Google Fonts</strong> — sayfa yazı tipi Google'ın sunucularından
+              yüklenir; bu sırada IP adresiniz Google'a görünür.
+            </li>
+            <li>
+              <strong>Cloudflare</strong> — sitemiz Cloudflare üzerinden sunulur;
+              güvenlik ve performans amacıyla standart bağlantı kayıtları tutar.
+            </li>
+          </ul>
+
+          <h2>Çerezler ve takip</h2>
+          <p>
+            TestMaker <strong>çerez kullanmaz</strong>. Analitik, reklam veya
+            takip aracı yoktur. Tarayıcınızın yerel deposunda yalnızca iki şey
+            tutulur: dil tercihiniz ve (siz isterseniz) DeepL anahtarınız. İkisi
+            de bize gönderilmez.
+          </p>
+
+          <h2>Kendi sunucunuzda çalıştırmak</h2>
+          <p>
+            TestMaker açık kaynaktır. Hiçbir şeyi bize göndermeden kendi
+            bilgisayarınızda çalıştırabilirsiniz —
+            <a
+              href="https://github.com/TalhaTufanN/english-turkish-vocab-quiz"
+              target="_blank"
+              rel="noopener"
+              >kaynak kodu GitHub'da</a
+            >.
+          </p>
+
+          <h2>İletişim</h2>
+          <p>
+            Sorularınız için:
+            <a href="https://gwrlabs.com" target="_blank" rel="noopener"
+              >gwrlabs.com</a
+            >
+          </p>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <a href="/" data-i18n="footerHome">TestMaker</a>
+        <span class="footer-sep">·</span>
+        <a href="https://gwrlabs.com" target="_blank" rel="noopener">GWR Labs</a>
+      </footer>
+    </main>
+
+    <script>
+      const legalTranslations = {
+        tr: {
+          backHome: "← TestMaker'a dön",
+          title: "Gizlilik Politikası",
+          updated: "Son güncelleme: 17 Temmuz 2026",
+          footerHome: "TestMaker",
+        },
+        en: {
+          backHome: "← Back to TestMaker",
+          title: "Privacy Policy",
+          updated: "Last updated: 17 July 2026",
+          footerHome: "TestMaker",
+        },
+      };
+
+      // Yasal metnin tamami - ceviri sozlugune sigmayacak kadar uzun oldugu
+      // icin blok halinde degistiriliyor.
+      legalTranslations.en.body = `
+        <h2>In short</h2>
+        <div class="callout">
+          <p><strong>TestMaker has no accounts, no tracking, and keeps nothing you upload.</strong>
+          Your DeepL API key is used only for that one translation request. It is never stored,
+          saved, or logged on our server.</p>
+        </div>
+
+        <h2>Your DeepL API key</h2>
+        <p>TestMaker translates using <strong>your own DeepL key</strong>. That is deliberate: the
+        quota is yours, the cost is yours, and it means we never have to ask you to create an
+        account or sign in.</p>
+        <p>What happens to your key:</p>
+        <ul>
+          <li>It is sent from your browser to our server <strong>over HTTPS</strong>, in a request
+          header rather than the URL — URLs end up in server and proxy logs; headers do not.</li>
+          <li>On our server it exists only in memory, only for the life of that request.
+          <strong>It is never written to a database, saved to disk, or cached.</strong></li>
+          <li>It is <strong>scrubbed</strong> from error messages and logs, so even an unexpected
+          failure cannot record it.</li>
+          <li>When the request ends, it is gone.</li>
+        </ul>
+        <p>If you tick "Remember on this device", your key is stored in
+        <strong>your own browser's</strong> local storage (<code>localStorage</code>) — it is not
+        sent to us and does not persist on our side. You can remove it any time with
+        "Forget saved key".</p>
+
+        <h2>The file you upload</h2>
+        <p>Your <code>.txt</code> file is written to disk temporarily so it can be processed, and is
+        <strong>deleted as soon as the request finishes</strong> — whether it succeeded or not. Its
+        contents are not retained, analysed, or shared.</p>
+
+        <h2>The PDFs we generate</h2>
+        <p>Your vocabulary list and quiz are created on our server with unguessable random names and
+        are <strong>deleted automatically a short time later</strong>. Because the links are
+        unguessable, others cannot practically reach your files — but these are not designed for
+        confidential material, so download and keep what you need.</p>
+
+        <h2>Third parties</h2>
+        <ul>
+          <li><strong>DeepL SE</strong> — your words are sent to DeepL for translation. This happens
+          under your own key and your own agreement with DeepL. Their privacy policy:
+          <a href="https://www.deepl.com/privacy" target="_blank" rel="noopener">deepl.com/privacy</a>.</li>
+          <li><strong>Google Fonts</strong> — the page font loads from Google's servers, which makes
+          your IP address visible to Google.</li>
+          <li><strong>Cloudflare</strong> — our site is served through Cloudflare, which keeps
+          standard connection logs for security and performance.</li>
+        </ul>
+
+        <h2>Cookies and tracking</h2>
+        <p>TestMaker <strong>uses no cookies</strong>. There is no analytics, advertising, or
+        tracking of any kind. Only two things live in your browser's local storage: your language
+        preference and, if you choose, your DeepL key. Neither is sent to us.</p>
+
+        <h2>Running it yourself</h2>
+        <p>TestMaker is open source. You can run it on your own machine and send us nothing at all —
+        <a href="https://github.com/TalhaTufanN/english-turkish-vocab-quiz" target="_blank" rel="noopener">the
+        source is on GitHub</a>.</p>
+
+        <h2>Contact</h2>
+        <p>Questions: <a href="https://gwrlabs.com" target="_blank" rel="noopener">gwrlabs.com</a></p>
+      `;
+      legalTranslations.tr.body = document.querySelector("[data-i18n='body']").innerHTML;
+
+      const langBtn = document.getElementById("lang-btn");
+      function setLanguage(lang) {
+        localStorage.setItem("gwr_lang", lang);
+        document.documentElement.lang = lang;
+        langBtn.textContent = lang === "tr" ? "TR" : "EN";
+        document.title =
+          (lang === "tr" ? "Gizlilik Politikası" : "Privacy Policy") + " | TestMaker";
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const value = legalTranslations[lang][el.dataset.i18n];
+          if (value) el.innerHTML = value;
+        });
+      }
+      setLanguage(localStorage.getItem("gwr_lang") || "tr");
+      langBtn.addEventListener("click", () =>
+        setLanguage((localStorage.getItem("gwr_lang") || "tr") === "tr" ? "en" : "tr"),
+      );
+    </script>
+  </body>
+</html>

@@ -1,10 +1,13 @@
 <!doctype html>
-<html lang="en">
+<html lang="tr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TestMaker | Modern Vocabulary Quiz Generator</title>
-    <!-- Modern web font -->
+    <title>TestMaker | Kelime Listesi ve Test Oluşturucu</title>
+    <meta
+      name="description"
+      content="İngilizce kelime listenizi Türkçe çevirili kelime kartlarına ve 50 soruluk teste anında dönüştürün."
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -20,16 +23,77 @@
       <div class="blob blob-3"></div>
     </div>
 
+    <button id="lang-btn" class="lang-btn" type="button" aria-label="Language">
+      TR
+    </button>
+
     <main class="container">
       <header class="header">
-        <h1>TestMaker</h1>
-        <p>
-          Transform your English word list into Turkish translated vocabulary
-          lists and 50-question quizzes instantly.
+        <h1 data-i18n="heroTitle">TestMaker</h1>
+        <p data-i18n="heroDesc">
+          İngilizce kelime listenizi, Türkçe çevirili kelime kartlarına ve 50
+          soruluk teste anında dönüştürün.
         </p>
       </header>
 
       <section class="card glassmorphism">
+        <!-- API key (yalnizca herkese acik kurulumda gorunur) -->
+        <div id="key-section" class="key-section hidden">
+          <label class="key-label" for="api-key" data-i18n="keyLabel"
+            >DeepL API Anahtarınız</label
+          >
+          <p class="key-hint" data-i18n="keyHint">
+            Çeviri için kendi DeepL anahtarınızı kullanırsınız.
+            <a href="https://www.deepl.com/pro-api" target="_blank" rel="noopener"
+              >Ücretsiz anahtar alın</a
+            >
+            — ayda 500.000 karakter, binlerce kelime listesine yeter.
+          </p>
+          <input
+            type="password"
+            id="api-key"
+            class="key-input"
+            autocomplete="off"
+            spellcheck="false"
+            data-i18n-placeholder="keyPlaceholder"
+            placeholder="Örn: 12345678-abcd-...:fx"
+          />
+          <div class="key-row">
+            <label class="key-remember">
+              <input type="checkbox" id="key-remember" checked />
+              <span data-i18n="keyRemember">Bu cihazda hatırla</span>
+            </label>
+            <button
+              type="button"
+              id="key-forget"
+              class="key-forget hidden"
+              data-i18n="keyForget"
+            >
+              Kayıtlı anahtarı sil
+            </button>
+          </div>
+          <p class="key-privacy">
+            <svg
+              class="lock-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M7 11V7a5 5 0 0 1 10 0v4M5 11h14v10H5V11z"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <span data-i18n="keyPrivacy"
+              >Anahtarınız yalnızca bu isteğin çevirisi için kullanılır.
+              Sunucumuzda saklanmaz, kaydedilmez, loglanmaz.</span
+            >
+          </p>
+        </div>
+
         <div id="upload-zone" class="upload-zone">
           <input type="file" id="file-input" accept=".txt" hidden />
           <div class="upload-content">
@@ -47,26 +111,33 @@
                 stroke-linejoin="round"
               />
             </svg>
-            <h2>Upload your .txt file</h2>
-            <p>Drag & drop your text file here, or click to browse.</p>
-            <span class="btn-primary" id="browse-btn">Browse Files</span>
+            <h2 data-i18n="uploadTitle">.txt dosyanızı yükleyin</h2>
+            <p data-i18n="uploadDesc">
+              Dosyanızı buraya sürükleyin veya seçmek için tıklayın.
+            </p>
+            <span class="btn-primary" id="browse-btn" data-i18n="uploadBtn"
+              >Dosya Seç</span
+            >
           </div>
         </div>
 
-        <!-- Loading State -->
+        <p class="upload-rules" data-i18n="uploadRules">
+          Her satırda bir İngilizce kelime, en az 50 kelime. Kelime türü
+          işaretleri (<code>v.</code>, <code>n.</code>, <code>adj.</code>)
+          çeviriyi belirgin şekilde iyileştirir.
+        </p>
+
+        <!-- Loading -->
         <div id="loading-state" class="state hidden">
           <div class="spinner"></div>
-          <h3>Processing your vocabulary...</h3>
-          <p>
-            This may take a moment while we translate your words via DeepL...
-          </p>
-          <!-- Simple progress indicator -->
+          <h3 data-i18n="loadingTitle">Kelimeleriniz işleniyor...</h3>
+          <p data-i18n="loadingDesc">DeepL çeviriyi yaparken bir saniye...</p>
           <div class="progress-bar-container">
             <div class="progress-bar" id="progress-bar"></div>
           </div>
         </div>
 
-        <!-- Success State -->
+        <!-- Success -->
         <div id="success-state" class="state hidden">
           <div class="success-icon-container">
             <svg
@@ -84,20 +155,32 @@
               />
             </svg>
           </div>
-          <h3>Generation Complete!</h3>
-          <p>Your vocabulary list and generated quiz are ready for download.</p>
+          <h3 data-i18n="successTitle">Hazır!</h3>
+          <p data-i18n="successDesc">
+            Kelime listeniz ve testiniz indirilmeye hazır.
+          </p>
           <div class="download-actions">
-            <a id="download-words" class="btn-primary" href="#" target="_blank"
-              >Download Word List</a
+            <a
+              id="download-words"
+              class="btn-primary"
+              href="#"
+              data-i18n="downloadWords"
+              >Kelime Listesini İndir</a
             >
-            <a id="download-quiz" class="btn-secondary" href="#" target="_blank"
-              >Download Quiz PDF</a
+            <a
+              id="download-quiz"
+              class="btn-secondary"
+              href="#"
+              data-i18n="downloadQuiz"
+              >Testi İndir</a
             >
           </div>
-          <button id="reset-btn" class="btn-ghost">Create Another</button>
+          <button id="reset-btn" class="btn-ghost" data-i18n="resetBtn">
+            Yeni Bir Tane Oluştur
+          </button>
         </div>
 
-        <!-- Error State -->
+        <!-- Error -->
         <div id="error-state" class="state hidden">
           <div class="error-icon-container">
             <svg
@@ -115,12 +198,30 @@
               />
             </svg>
           </div>
-          <h3>Something went wrong</h3>
-          <p id="error-message">We couldn't process your file.</p>
-          <button id="retry-btn" class="btn-primary">Try Again</button>
+          <h3 data-i18n="errorTitle">Bir şeyler ters gitti</h3>
+          <p id="error-message" data-i18n="errorDesc">Dosyanız işlenemedi.</p>
+          <button id="retry-btn" class="btn-primary" data-i18n="retryBtn">
+            Tekrar Dene
+          </button>
         </div>
       </section>
+
+      <footer class="footer">
+        <a href="/privacy/" data-i18n="footerPrivacy">Gizlilik</a>
+        <span class="footer-sep">·</span>
+        <a
+          href="https://github.com/TalhaTufanN/english-turkish-vocab-quiz"
+          target="_blank"
+          rel="noopener"
+          data-i18n="footerSource"
+          >Kaynak Kodu</a
+        >
+        <span class="footer-sep">·</span>
+        <a href="https://gwrlabs.com" target="_blank" rel="noopener">GWR Labs</a>
+      </footer>
     </main>
+
+    <script src="/static/translations.js"></script>
     <script src="/static/script.js"></script>
   </body>
 </html>
