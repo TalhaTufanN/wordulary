@@ -2,6 +2,8 @@ import os
 from datetime import datetime
 from fpdf import FPDF
 
+from src.fonts import REGULAR, fit_font_size
+
 # Kelimeler ve anlamlar için PDF oluşturma fonksiyonu
 def create_word_list_pdf(translations, file_name=None, output_dir=None):
     # Klasör oluştur. Yol mutlak - sürecin nereden başlatıldığına bağlı olmamalı.
@@ -17,16 +19,12 @@ def create_word_list_pdf(translations, file_name=None, output_dir=None):
 
     file_path = os.path.join(output_dir, file_name)
     
-    # Font dosya yolları
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    font_path = os.path.join(base_dir, "arial.ttf")
     
     pdf = FPDF(orientation="P", unit="mm", format="A4")
     pdf.set_auto_page_break(auto=False, margin=10)  # Otomatik sayfa kırılmasını kapat
     
-    # Arial Font ekle
-    pdf.add_font("Arial", "", font_path, uni=True)
-    pdf.set_font("Arial", size=12)
+    pdf.add_font("Body", "", REGULAR, uni=True)
+    pdf.set_font("Body", size=12)
     
     # Sol ve sağ sütun başlangıç noktaları
     left_margin = 10
@@ -35,6 +33,12 @@ def create_word_list_pdf(translations, file_name=None, output_dir=None):
     line_height = 8  # Her kelime ve anlam arasındaki mesafe
     words_per_page = 50  # Her sayfada 50 kelime (25 sol + 25 sağ)
     words_per_column = 25  # Her sütunda 25 kelime
+    cell_width = 90  # Sütunlar arası mesafe 95mm - 5mm boşluk bırakır
+
+    # Font boyutunu en uzun satıra göre seç: uzun bir çeviri sağdaki sütunun
+    # üzerine taşmasın. fpdf'in cell()'i taşan metni kırpmaz.
+    lines = [f"{i}) {word} - {translated}" for i, (word, translated) in enumerate(translations.items(), 1)]
+    pdf.set_font_size(fit_font_size(pdf, lines, cell_width, start_size=12))
 
     # Kelimeleri iki sütunda yazdırmak için düzen
     for i, (word, translated) in enumerate(translations.items(), 1):

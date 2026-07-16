@@ -26,18 +26,18 @@ Give it a `.txt` file with one English word per line. It returns two print-ready
 | **Vocabulary List** | A two-column A4 handout pairing each English word with its Turkish translation, 50 words per page. |
 | **Quiz** | A 50-question multiple-choice test. Questions are sampled at random from your list, and the three distractors for each question are drawn from the other translations — so the wrong answers are always plausible. |
 
-Word-type abbreviations (`v.`, `n.`, `adj.`, `phr.v.`, and friends) are stripped automatically before translation, so you can paste a list straight out of a coursebook or the Oxford 5000 without cleaning it up first.
+Paste a list straight out of a coursebook or the Oxford 5000 — no cleanup needed. Word-type markers (`v.`, `n.`, `adj.`, `phr.v.`) are parsed off the word, and then *used*: they tell DeepL which sense you meant. A bare `litter` comes back as "litre"; `litter n.` comes back as "çöp". Lists without markers work fine too.
 
 ## How it works
 
 ```
- .txt upload  ─▶  parse & clean  ─▶  DeepL (EN→TR)  ─▶  ┬─▶  Vocabulary List PDF
-                                                        └─▶  Quiz PDF (+ distractors)
+ .txt upload ─▶ parse word + part of speech ─▶ DeepL (EN→TR, batched by POS) ─▶ ┬─▶ Vocabulary List PDF
+                                                                                └─▶ Quiz PDF (+ distractors)
 ```
 
 - **Backend** — [FastAPI](https://fastapi.tiangolo.com/), serving both the API and the static frontend from one process.
-- **Translation** — the official [DeepL Python client](https://github.com/DeepLcom/deepl-python), chosen over machine-translation alternatives because vocabulary-level accuracy is the whole product.
-- **PDF generation** — [FPDF](https://pyfpdf.github.io/fpdf2/) with a manual two-column layout, tuned to fit exactly 50 items per page.
+- **Translation** — the official [DeepL Python client](https://github.com/DeepLcom/deepl-python), chosen over cheaper engines because vocabulary-level accuracy *is* the product. Words are grouped by part of speech and sent in batches, each batch carrying a context that tells DeepL what kind of word it's translating.
+- **PDF generation** — [FPDF](https://pyfpdf.github.io/fpdf2/) with a manual two-column layout, fitting 50 items per page. Font size is chosen from the longest line so a long translation can't spill into the next column.
 - **Frontend** — vanilla HTML/CSS/JS. No build step, no framework, no `node_modules`. A glassmorphic card over an animated gradient mesh.
 
 ### Project layout
@@ -47,12 +47,14 @@ TestMaker/
 ├── app.py                       # FastAPI app — routes, upload handling, static mount
 ├── main.py                      # Legacy Tkinter desktop entry point (superseded by app.py)
 ├── src/
-│   ├── read_words_from_txt.py   # Parse .txt, strip word-type abbreviations
-│   ├── translate_words.py       # DeepL client + retry/backoff
+│   ├── read_words_from_txt.py   # Parse .txt into (word, part-of-speech) pairs
+│   ├── translate_words.py       # DeepL client — POS-grouped batching, sense disambiguation
+│   ├── fonts.py                 # Bundled fonts + auto-fit sizing
 │   ├── create_word_list_pdf.py  # Two-column vocabulary handout
 │   ├── generate_choices.py      # Pick 3 plausible distractors per question
 │   └── create_quiz_pdf.py       # Two-column quiz sheet
-├── static/                      # index.html, style.css, script.js
+├── static/                      # index.html, privacy.html, style.css, script.js, translations.js
+├── fonts/                       # DejaVu Sans (open-licensed, covers Turkish)
 ├── example_txt_files/           # Sample word lists to try
 └── sources/                     # Reference material (Oxford 5000 by CEFR level)
 ```
@@ -63,6 +65,7 @@ TestMaker/
 
 - Python 3.10 or newer
 - A DeepL API key — the [free tier](https://www.deepl.com/pro-api) covers 500,000 characters per month, which is thousands of word lists
+- No system fonts needed: DejaVu Sans ships with the repo
 
 ### Setup
 
@@ -104,29 +107,28 @@ Then open **<http://localhost:8000>**.
 
 1. Prepare a `.txt` file with one English word per line. **At least 50 words** — that's the quiz length.
 2. Drop it onto the upload zone.
-3. Wait for DeepL to translate. Longer lists take longer; the translator paces its requests to stay inside DeepL's rate limits.
+3. Wait a moment for DeepL. A 60-word list takes about two seconds.
 4. Download both PDFs.
 
 No word list handy? Try any of the files in [`example_txt_files/`](example_txt_files/).
 
 ## API
 
-The frontend is a thin client over two endpoints. Both are documented interactively at `/docs` while the server is running.
+The frontend is a thin client over these endpoints, documented interactively at `/docs` while the server is running.
 
 | Method | Endpoint | Description |
 | --- | --- | --- |
-| `POST` | `/api/process` | Accepts a `.txt` upload, returns download URLs for both PDFs. |
+| `POST` | `/api/process` | Accepts a `.txt` upload, returns download URLs for both PDFs. Takes an optional `X-DeepL-Api-Key` header. |
 | `GET` | `/api/download/{filename}?type=words\|quizzes` | Serves a generated PDF. |
+| `GET` | `/api/config` | Tells the frontend whether a user-supplied key is required. |
+| `GET` | `/health` | Liveness check for the reverse proxy. |
 
 ## Roadmap
 
 TestMaker is being prepared for a public deployment at `testmaker.gwrlabs.com`. Getting there means changing how a few things work:
 
-- **Bring your own key** — the hosted version will ask each user for their own DeepL key, used for that request and never stored. The self-hosted `.env` flow stays exactly as it is.
-- **Batch translation** — DeepL accepts a list of texts per call, so a 500-word list becomes a handful of requests instead of 500 sequential ones.
-- **Hardened file handling** — sanitized filenames, upload size limits, and short-lived download tokens.
-- **Bundled open fonts** — replacing the licensed Arial files with an open-licensed family.
-- **Turkish interface** — TR/EN localization, matching the rest of the GWR Labs ecosystem.
+- **Bring your own key** — the hosted version asks each user for their own DeepL key, used for that request and never stored. The self-hosted `.env` flow stays exactly as it is.
+- **Deployment** — nginx + systemd on the GWR Labs VPS.
 
 ## License
 

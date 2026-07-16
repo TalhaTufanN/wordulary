@@ -208,10 +208,18 @@ __marimo__/
 
 .vscode
 quizzes
-fonts
 words
-example_txt_files
 temp_*
+
+# b2.txt 50 kelimenin altinda - quiz uretemez, ornek olarak dagitilmamali
+example_txt_files/b2.txt
+
+# Arial artik kullanilmiyor (Microsoft lisansli); yerine fonts/DejaVuSans*.ttf
+arial*.ttf
+
+# fpdf'in urettigi font onbellegi - kaynak degil, kendini yeniden olusturur
+*.pkl
+*.cw127.pkl
 sources
 
 # Internal working context — contains infrastructure details (VPS address, SSH key
