@@ -3,17 +3,19 @@ from datetime import datetime
 from fpdf import FPDF
 
 # Kelimeler ve anlamlar için PDF oluşturma fonksiyonu
-def create_word_list_pdf(translations, file_name=None):
-    # Klasör oluştur
-    words_dir = "words"
-    os.makedirs(words_dir, exist_ok=True)
-    
+def create_word_list_pdf(translations, file_name=None, output_dir=None):
+    # Klasör oluştur. Yol mutlak - sürecin nereden başlatıldığına bağlı olmamalı.
+    if output_dir is None:
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        output_dir = os.path.join(base_dir, "words")
+    os.makedirs(output_dir, exist_ok=True)
+
     # Benzersiz dosya adı oluştur
     if file_name is None:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         file_name = f"word_list_{timestamp}.pdf"
-    
-    file_path = os.path.join(words_dir, file_name)
+
+    file_path = os.path.join(output_dir, file_name)
     
     # Font dosya yolları
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

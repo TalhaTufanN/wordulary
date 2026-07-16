@@ -213,3 +213,7 @@ words
 example_txt_files
 temp_*
 sources
+
+# Internal working context — contains infrastructure details (VPS address, SSH key
+# paths, other GWR Labs projects). This repo is public; keep it local.
+context.md

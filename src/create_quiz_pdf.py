@@ -3,17 +3,19 @@ from datetime import datetime
 from fpdf import FPDF
 
 # Quiz PDF oluşturma
-def create_pdf(questions, file_name=None):
-    # Klasör oluştur
-    quizzes_dir = "quizzes"
-    os.makedirs(quizzes_dir, exist_ok=True)
-    
+def create_pdf(questions, file_name=None, output_dir=None):
+    # Klasör oluştur. Yol mutlak - sürecin nereden başlatıldığına bağlı olmamalı.
+    if output_dir is None:
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        output_dir = os.path.join(base_dir, "quizzes")
+    os.makedirs(output_dir, exist_ok=True)
+
     # Benzersiz dosya adı oluştur
     if file_name is None:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         file_name = f"quiz_{timestamp}.pdf"
-    
-    file_path = os.path.join(quizzes_dir, file_name)
+
+    file_path = os.path.join(output_dir, file_name)
     
     # Font dosya yolları
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

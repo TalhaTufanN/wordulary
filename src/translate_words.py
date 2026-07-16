@@ -1,60 +1,97 @@
-import deepl
-import time
 import os
+import time
+
+import deepl
+
 try:
     from dotenv import load_dotenv
+
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    env_path = os.path.join(base_dir, ".env")
-    load_dotenv(env_path)
+    load_dotenv(os.path.join(base_dir, ".env"))
 except ImportError:
-    pass 
+    pass
 
-DEEPL_API_KEY = os.getenv("DEEPL_API_KEY")
-if not DEEPL_API_KEY:
-    raise ValueError("DEEPL_API_KEY environment variable is not set. Please set it in your environment or create a .env file in the root directory with DEEPL_API_KEY=your_key")
-translator = deepl.Translator(DEEPL_API_KEY)
+# DeepL tek istekte 50 metne kadar kabul ediyor. Listedeki her metin
+# birbirinden bagimsiz cevrilir (ortak baglam kullanilmaz), yani batch'lemek
+# ciktiyi degistirmez - sadece 500 HTTP istegini ~10'a indirir.
+BATCH_SIZE = 50
 
-# Kelimeleri Türkçeye çevir
-def translate_words(words):
+MAX_RETRIES = 3
+RETRY_BASE_DELAY = 2
+
+
+class TranslationError(Exception):
+    """Kullaniciya gosterilebilecek, uzerine islem yapilabilir ceviri hatasi."""
+
+
+def _resolve_api_key(api_key=None):
+    key = api_key or os.getenv("DEEPL_API_KEY")
+    if not key:
+        raise TranslationError(
+            "DeepL API anahtari bulunamadi. Ortam degiskenlerine ekleyin veya "
+            "proje kokunde DEEPL_API_KEY=anahtariniz iceren bir .env dosyasi olusturun."
+        )
+    return key
+
+
+def translate_words(words, api_key=None):
+    """Ingilizce kelimeleri Turkceye cevirir; {kelime: ceviri} dondurur.
+
+    api_key verilmezse DEEPL_API_KEY ortam degiskenine duser (self-host / lokal
+    gelistirme icin). Anahtar istek basina verilebilsin diye Translator burada
+    kuruluyor - modul seviyesinde tutulmuyor.
+    """
+    if not words:
+        return {}
+
+    translator = deepl.Translator(_resolve_api_key(api_key))
     translations = {}
-    total_words = len(words)
-    
-    for idx, word in enumerate(words, 1):
-        max_retries = 5
-        retry_delay = 2  # İlk retry'da 2 saniye bekle
-        
-        for attempt in range(max_retries):
-            try:
-                # İstekler arasında bekleme (rate limiting için)
-                if idx > 1:  # İlk kelimeden sonra bekle
-                    time.sleep(0.5)  # Her istek arasında 0.5 saniye bekle
-                
-                translated = translator.translate_text(word, target_lang="TR").text
-                translations[word] = translated
-                
-                # İlerleme göster
-                if idx % 10 == 0 or idx == total_words:
-                    print(f"  {idx}/{total_words} kelime çevrildi...")
-                
-                break  # Başarılı oldu, döngüden çık
-                
-            except deepl.exceptions.TooManyRequestsException:
-                if attempt < max_retries - 1:
-                    wait_time = retry_delay * (2 ** attempt)  # Exponential backoff
-                    print(f"  Çok fazla istek! {wait_time} saniye bekleniyor... (Deneme {attempt + 1}/{max_retries})")
-                    time.sleep(wait_time)
-                else:
-                    print(f"  HATA: '{word}' kelimesi çevrilemedi (çok fazla deneme sonrası)")
-                    translations[word] = f"[Çevrilemedi: {word}]"
-                    
-            except Exception as e:
-                if attempt < max_retries - 1:
-                    wait_time = retry_delay * (2 ** attempt)
-                    print(f"  Hata oluştu: {e}. {wait_time} saniye bekleniyor... (Deneme {attempt + 1}/{max_retries})")
-                    time.sleep(wait_time)
-                else:
-                    print(f"  HATA: '{word}' kelimesi çevrilemedi: {e}")
-                    translations[word] = f"[Çevrilemedi: {word}]"
-    
+    total = len(words)
+
+    for start in range(0, total, BATCH_SIZE):
+        batch = words[start : start + BATCH_SIZE]
+        results = _translate_batch(translator, batch)
+        for word, translated in zip(batch, results):
+            translations[word] = translated
+        print(f"  {min(start + BATCH_SIZE, total)}/{total} kelime çevrildi...")
+
     return translations
 
+
+def _translate_batch(translator, batch):
+    """Tek bir batch'i cevirir. Kalici hatalarda TranslationError firlatir."""
+    for attempt in range(MAX_RETRIES):
+        try:
+            results = translator.translate_text(batch, target_lang="TR")
+            return [r.text for r in results]
+
+        # Anahtar hatalari retry'lanmaz - beklemek sonucu degistirmez ve
+        # kullanicinin duzeltebilecegi somut bir durumdur.
+        except deepl.exceptions.AuthorizationException:
+            raise TranslationError(
+                "DeepL API anahtari geçersiz. Anahtarınızı kontrol edin."
+            )
+        except deepl.exceptions.QuotaExceededException:
+            raise TranslationError(
+                "DeepL API anahtarınızın karakter kotası dolmuş. "
+                "Kotanız yenilenene kadar çeviri yapılamaz."
+            )
+
+        except deepl.exceptions.TooManyRequestsException:
+            if attempt == MAX_RETRIES - 1:
+                raise TranslationError(
+                    "DeepL çok fazla istek aldığı için çeviriyi reddetti. "
+                    "Lütfen biraz sonra tekrar deneyin."
+                )
+            wait = RETRY_BASE_DELAY * (2**attempt)
+            print(f"  Çok fazla istek! {wait} saniye bekleniyor... (Deneme {attempt + 1}/{MAX_RETRIES})")
+            time.sleep(wait)
+
+        except deepl.exceptions.DeepLException as e:
+            if attempt == MAX_RETRIES - 1:
+                raise TranslationError(f"DeepL çeviri hatası: {e}")
+            wait = RETRY_BASE_DELAY * (2**attempt)
+            print(f"  Hata oluştu: {e}. {wait} saniye bekleniyor... (Deneme {attempt + 1}/{MAX_RETRIES})")
+            time.sleep(wait)
+
+    raise TranslationError("Çeviri başarısız oldu.")

@@ -2,7 +2,7 @@ import random
 import tkinter as tk
 from tkinter import filedialog
 from src.read_words_from_txt import read_words_from_txt
-from src.translate_words import translate_words
+from src.translate_words import TranslationError, translate_words
 from src.create_word_list_pdf import create_word_list_pdf
 from src.generate_choices import generate_choices
 from src.create_quiz_pdf import create_pdf
@@ -30,7 +30,11 @@ def main():
         print("En az 50 kelime içeren bir dosya ekleyin.")
         return
     print(f"Kelimeler çevriliyor...")
-    translations = translate_words(words)
+    try:
+        translations = translate_words(words)
+    except TranslationError as e:
+        print(f"Çeviri yapılamadı: {e}")
+        return
     print(f"Kelimeler çevrildi...")
     # Kelimeler ve anlamlar için PDF oluştur
     create_word_list_pdf(translations)
