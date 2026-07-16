@@ -24,14 +24,14 @@ def main():
     
     print(f"Seçilen dosya: {file_path}")
     print(f"Txt dosyası okunuyor...")
-    words = read_words_from_txt(file_path)
+    entries = read_words_from_txt(file_path)
     print(f"Txt dosyası okundu...")
-    if len(words) < 50:
+    if len(entries) < 50:
         print("En az 50 kelime içeren bir dosya ekleyin.")
         return
     print(f"Kelimeler çevriliyor...")
     try:
-        translations = translate_words(words)
+        translations = translate_words(entries)
     except TranslationError as e:
         print(f"Çeviri yapılamadı: {e}")
         return

@@ -30,7 +30,8 @@ OUTPUT_DIRS = {
 SAFE_FILENAME = re.compile(r"^[A-Za-z0-9_-]+\.pdf$")
 
 MAX_UPLOAD_BYTES = 1 * 1024 * 1024  # 1 MB
-MIN_WORDS = 50
+MIN_WORDS = 50  # Quiz 50 soruluk - bundan azi ile uretilemez.
+MAX_WORDS = 1000  # Patolojik bir dosya bir worker'i mesgul etmesin.
 
 os.makedirs(os.path.join(BASE_DIR, "static"), exist_ok=True)
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
@@ -62,13 +63,18 @@ def process_file(file: UploadFile = File(...)):
     try:
         _save_upload(file, temp_file_path)
 
-        words = read_words_from_txt(temp_file_path)
-        if len(words) < MIN_WORDS:
+        # (kelime, tur) ciftleri - tur bilgisi anlam ayrimi icin kullaniliyor.
+        entries = read_words_from_txt(temp_file_path)
+        if len(entries) < MIN_WORDS:
             raise HTTPException(
                 status_code=400, detail=f"The file must contain at least {MIN_WORDS} words."
             )
+        if len(entries) > MAX_WORDS:
+            raise HTTPException(
+                status_code=400, detail=f"The file must contain at most {MAX_WORDS} words."
+            )
 
-        translations = translate_words(words)
+        translations = translate_words(entries)
 
         word_list_name = f"word_list_{uuid.uuid4().hex}.pdf"
         quiz_name = f"quiz_{uuid.uuid4().hex}.pdf"
