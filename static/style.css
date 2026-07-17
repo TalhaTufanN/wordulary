@@ -1,14 +1,15 @@
 :root {
-  --bg-dark: #0f111a;
-  --card-bg: rgba(255, 255, 255, 0.03);
-  --card-border: rgba(255, 255, 255, 0.08);
-  --text-primary: #ffffff;
-  --text-secondary: #94a3b8;
-  --accent-primary: #8b5cf6;
-  --accent-secondary: #ec4899;
-  --accent-hover: #7c3aed;
-  --success: #10b981;
-  --error: #ef4444;
+  /* Açık tema - logo paletinden türetildi (#230527 koyu mor + #F5F5F3 krem). */
+  --bg-dark: #f4f2f0; /* isim eski, değer açık: ana zemin (krem) */
+  --card-bg: #ffffff; /* beyaz kart */
+  --card-border: rgba(35, 5, 39, 0.1); /* koyu mor hafif kenar */
+  --text-primary: #230527; /* logo moru - ana metin */
+  --text-secondary: #6e5f73; /* mor-gri ikincil */
+  --accent-primary: #3a0a44; /* koyu mor - butonlar/vurgu */
+  --accent-secondary: #7a2d8f; /* canlı mor - gradient */
+  --accent-hover: #230527; /* hover: en koyu mor */
+  --success: #0f9d6b;
+  --error: #dc2626;
 }
 
 * {
@@ -43,8 +44,8 @@ body {
 
 .blob {
   position: absolute;
-  filter: blur(100px);
-  opacity: 0.5;
+  filter: blur(110px);
+  opacity: 0.55;
   animation: float 20s infinite alternate;
 }
 
@@ -55,8 +56,8 @@ body {
   height: 50vw;
   background: radial-gradient(
     circle,
-    rgba(139, 92, 246, 0.4) 0%,
-    rgba(0, 0, 0, 0) 70%
+    rgba(122, 45, 143, 0.12) 0%,
+    rgba(255, 255, 255, 0) 70%
   );
 }
 
@@ -67,8 +68,8 @@ body {
   height: 60vw;
   background: radial-gradient(
     circle,
-    rgba(236, 72, 153, 0.3) 0%,
-    rgba(0, 0, 0, 0) 70%
+    rgba(35, 5, 39, 0.08) 0%,
+    rgba(255, 255, 255, 0) 70%
   );
   animation-delay: -5s;
 }
@@ -80,8 +81,8 @@ body {
   height: 40vw;
   background: radial-gradient(
     circle,
-    rgba(59, 130, 246, 0.3) 0%,
-    rgba(0, 0, 0, 0) 70%
+    rgba(160, 90, 180, 0.1) 0%,
+    rgba(255, 255, 255, 0) 70%
   );
   animation-delay: -10s;
 }
@@ -123,6 +124,23 @@ body {
   letter-spacing: -1px;
 }
 
+.brand-icon {
+  display: block;
+  margin: 0 auto 1.25rem;
+  border-radius: 22px;
+  box-shadow: 0 10px 28px rgba(35, 5, 39, 0.16);
+}
+
+.brand-wordmark {
+  margin-bottom: 1.25rem;
+  line-height: 0;
+}
+
+.brand-wordmark img {
+  height: 44px;
+  width: auto;
+}
+
 .header p {
   color: var(--text-secondary);
   font-size: 1.1rem;
@@ -139,13 +157,13 @@ body {
   border: 1px solid var(--card-border);
   border-radius: 24px;
   padding: 3rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 20px 45px -15px rgba(35, 5, 39, 0.12);
   transition: all 0.3s ease;
 }
 
 /* Upload Zone */
 .upload-zone {
-  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border: 2px dashed rgba(35, 5, 39, 0.2);
   border-radius: 16px;
   padding: 4rem 2rem;
   text-align: center;
@@ -158,7 +176,7 @@ body {
 .upload-zone:hover,
 .upload-zone.dragover {
   border-color: var(--accent-primary);
-  background: rgba(139, 92, 246, 0.05);
+  background: rgba(122, 45, 143, 0.06);
   transform: translateY(-2px);
 }
 
@@ -207,22 +225,22 @@ body {
     var(--accent-hover)
   );
   color: white;
-  box-shadow: 0 4px 14px 0 rgba(139, 92, 246, 0.39);
+  box-shadow: 0 4px 14px 0 rgba(58, 10, 68, 0.3);
 }
 
 .btn-primary:hover {
-  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.23);
+  box-shadow: 0 6px 20px rgba(58, 10, 68, 0.22);
   transform: translateY(-2px);
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(35, 5, 39, 0.06);
+  color: var(--text-primary);
+  border: 1px solid rgba(35, 5, 39, 0.12);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(35, 5, 39, 0.1);
   transform: translateY(-2px);
 }
 
@@ -233,7 +251,7 @@ body {
 }
 
 .btn-ghost:hover {
-  color: white;
+  color: var(--text-primary);
 }
 
 /* States */
@@ -262,7 +280,7 @@ body {
 .spinner {
   width: 50px;
   height: 50px;
-  border: 3px solid rgba(255, 255, 255, 0.1);
+  border: 3px solid rgba(35, 5, 39, 0.08);
   border-radius: 50%;
   border-top-color: var(--accent-primary);
   animation: spin 1s ease-in-out infinite;
@@ -287,7 +305,7 @@ body {
 .progress-bar-container {
   width: 100%;
   height: 6px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(35, 5, 39, 0.08);
   border-radius: 6px;
   margin-top: 2rem;
   overflow: hidden;
@@ -415,7 +433,7 @@ body {
   width: 100%;
   padding: 0.85rem 1rem;
   border-radius: 12px;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(35, 5, 39, 0.04);
   border: 1px solid var(--card-border);
   color: var(--text-primary);
   font-size: 0.95rem;
@@ -511,7 +529,7 @@ body {
   min-width: 52px;
   padding: 0.6rem 0.9rem;
   border-radius: 12px;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(35, 5, 39, 0.04);
   border: 1px solid var(--card-border);
   color: var(--text-secondary);
   font-weight: 600;
@@ -529,7 +547,7 @@ body {
   background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
   border-color: transparent;
   color: #fff;
-  box-shadow: 0 4px 14px 0 rgba(139, 92, 246, 0.39);
+  box-shadow: 0 4px 14px 0 rgba(58, 10, 68, 0.3);
 }
 
 .count-custom {
@@ -537,7 +555,7 @@ body {
   margin-top: 0.6rem;
   padding: 0.75rem 1rem;
   border-radius: 12px;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(35, 5, 39, 0.04);
   border: 1px solid var(--card-border);
   color: var(--text-primary);
   font-size: 0.95rem;
@@ -560,7 +578,7 @@ body {
 
 .upload-rules code {
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(35, 5, 39, 0.06);
   padding: 0.1rem 0.35rem;
   border-radius: 4px;
   font-size: 0.8rem;
@@ -613,7 +631,7 @@ body {
   font-weight: 700;
   color: #fff;
   background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 4px 14px rgba(58, 10, 68, 0.32);
 }
 
 .how-step h3 {
@@ -641,7 +659,7 @@ body {
 .ex-card {
   flex: 1 1 0;
   min-width: 180px;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(35, 5, 39, 0.04);
   border: 1px solid var(--card-border);
   border-radius: 14px;
   padding: 1rem 1.1rem;
