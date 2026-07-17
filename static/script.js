@@ -170,6 +170,11 @@ document.addEventListener("DOMContentLoaded", () => {
       showError(t("errNotTxt"));
       return;
     }
+    // Boyut kontrolu istemcide: 10 MB'yi asan dosya bosuna yuklenmeden reddedilir.
+    if (file.size > 10 * 1024 * 1024) {
+      showError(t("errTooBig"));
+      return;
+    }
     if (requireUserKey && !currentKey()) {
       showError(t("errNoKey"));
       keyInput.focus();
