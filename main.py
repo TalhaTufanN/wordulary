@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
-from src.read_words_from_txt import read_words_from_txt
+from src.extract_words import extract_entries
 from src.translate_words import TranslationError, translate_words
 from src.create_word_list_pdf import create_word_list_pdf
 from src.generate_choices import generate_choices
@@ -25,19 +25,19 @@ def main():
     root.withdraw()  # Ana pencereyi gizle
     
     file_path = filedialog.askopenfilename(
-        title="TXT Dosyası Seçin",
-        filetypes=[("Text files", "*.txt"), ("All files", "*.*")]
+        title="Kelime Listesi Seçin",
+        filetypes=[("Desteklenen", "*.txt *.pdf *.docx"), ("All files", "*.*")]
     )
-    
+
     # Kullanıcı dosya seçmediyse (iptal butonuna bastıysa) çık
     if not file_path:
         print("Dosya seçilmedi. İşlem iptal edildi.")
         return
-    
+
     print(f"Seçilen dosya: {file_path}")
-    print(f"Txt dosyası okunuyor...")
-    entries = _dedupe(read_words_from_txt(file_path))
-    print(f"Txt dosyası okundu...")
+    print(f"Dosya okunuyor...")
+    entries = _dedupe(extract_entries(file_path))
+    print(f"Dosya okundu...")
     if len(entries) < MIN_WORDS:
         print(f"En az {MIN_WORDS} farklı kelime içeren bir dosya ekleyin.")
         return

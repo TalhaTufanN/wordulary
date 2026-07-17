@@ -10,8 +10,8 @@ from fastapi.staticfiles import StaticFiles
 
 from src.create_quiz_pdf import create_pdf
 from src.create_word_list_pdf import create_word_list_pdf
+from src.extract_words import SUPPORTED_EXTENSIONS, ExtractionError, extract_entries
 from src.generate_choices import generate_choices
-from src.read_words_from_txt import read_words_from_txt
 from src.translate_words import TranslationError, translate_words
 
 app = FastAPI(title="Wordulary UI", description="Modern UI for the Wordulary Application")
@@ -28,11 +28,14 @@ OUTPUT_DIRS = {
 # surucu harfi iceren hicbir sey buradan gecemez.
 SAFE_FILENAME = re.compile(r"^[A-Za-z0-9_-]+\.pdf$")
 
-MAX_UPLOAD_BYTES = 1 * 1024 * 1024  # 1 MB
+MAX_UPLOAD_BYTES = 5 * 1024 * 1024  # 5 MB (PDF/Word .txt'ten agir olabilir)
 # Coktan secmeli bir soru icin en az 4 benzersiz kelime gerekir: 1 dogru cevap
 # + 3 celdirici. Liste bundan uzun olsun yeter - 50 zorunlu degil.
 MIN_WORDS = 4
-MAX_WORDS = 1000  # Patolojik bir dosya bir worker'i mesgul etmesin.
+# Ust sinir: tam Oxford/B1/PET listeleri (~1700-3000) sigsin ama patolojik
+# dosyalar bir worker'i cok mesgul etmesin. 2000 kelime ~15-20sn ceviri,
+# Cloudflare'in 100sn siniri altinda.
+MAX_WORDS = 2000
 
 # BYOK (bring your own key): herkese acik kurulumda her kullanici kendi DeepL
 # anahtarini getirir. Boylece kota, maliyet ve kotuye kullanim yuzeyi ortadan
@@ -109,19 +112,25 @@ def process_file(
     if REQUIRE_USER_KEY and not user_key:
         raise HTTPException(status_code=401, detail="A DeepL API key is required.")
 
-    if not file.filename or not file.filename.lower().endswith(".txt"):
-        raise HTTPException(status_code=400, detail="Only .txt files are allowed")
+    ext = os.path.splitext(file.filename or "")[1].lower()
+    if ext not in SUPPORTED_EXTENSIONS:
+        allowed = ", ".join(SUPPORTED_EXTENSIONS)
+        raise HTTPException(status_code=400, detail=f"Only {allowed} files are allowed")
 
     # Yuklenen dosya adi kullaniciya ait - asla yol kurmakta kullanilmaz.
-    # Sunucu tarafinda uretilen gecici bir ada yaziyoruz.
-    temp_fd, temp_file_path = tempfile.mkstemp(suffix=".txt", prefix="wordulary_")
+    # Sunucu tarafinda uretilen gecici bir ada yaziyoruz (dogru uzantiyla, cikaric
+    # dosya tipini uzantidan anliyor).
+    temp_fd, temp_file_path = tempfile.mkstemp(suffix=ext, prefix="wordulary_")
     os.close(temp_fd)
 
     try:
         _save_upload(file, temp_file_path)
 
         # (kelime, tur) ciftleri - tur bilgisi anlam ayrimi icin kullaniliyor.
-        entries = read_words_from_txt(temp_file_path)
+        try:
+            entries = extract_entries(temp_file_path)
+        except ExtractionError as e:
+            raise HTTPException(status_code=400, detail=str(e))
 
         # Tekrarlari at (buyuk/kucuk harf ve bosluk duyarsiz), ilk gorulme
         # sirasini koru. Kelime sayisi kontrolu BENZERSIZ kelimeler uzerinden

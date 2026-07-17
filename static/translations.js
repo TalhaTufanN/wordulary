@@ -23,11 +23,11 @@ const translations = {
     countCustomPlaceholder: "Kaç soru?",
 
     // Upload
-    uploadTitle: ".txt dosyanızı yükleyin",
+    uploadTitle: "Kelime listenizi yükleyin",
     uploadDesc: "Dosyanızı buraya sürükleyin veya seçmek için tıklayın.",
     uploadBtn: "Dosya Seç",
     uploadRules:
-      "Her satırda bir İngilizce kelime. Kelime türü işaretleri (<code>v.</code>, <code>n.</code>, <code>adj.</code>) çeviriyi belirgin şekilde iyileştirir.",
+      ".txt, PDF veya Word (.docx). Her satırda bir İngilizce kelime; kelime türü işaretleri (<code>v.</code>, <code>n.</code>, <code>adj.</code>) çeviriyi belirgin şekilde iyileştirir.",
 
     // States
     loadingTitle: "Kelimeleriniz işleniyor...",
@@ -42,7 +42,7 @@ const translations = {
     retryBtn: "Tekrar Dene",
 
     // Client-side errors
-    errNotTxt: "Lütfen geçerli bir .txt dosyası yükleyin.",
+    errNotTxt: "Lütfen .txt, PDF veya Word (.docx) dosyası yükleyin.",
     errNoKey: "Devam etmek için DeepL API anahtarınızı girin.",
     errNetwork: "Ağ hatası. Bağlantınızı kontrol edip tekrar deneyin.",
     errGeneric: "Dosya işlenirken bir hata oluştu.",
@@ -73,11 +73,11 @@ const translations = {
     countCustom: "Custom",
     countCustomPlaceholder: "How many?",
 
-    uploadTitle: "Upload your .txt file",
-    uploadDesc: "Drag & drop your text file here, or click to browse.",
+    uploadTitle: "Upload your word list",
+    uploadDesc: "Drag & drop your file here, or click to browse.",
     uploadBtn: "Browse Files",
     uploadRules:
-      "One English word per line. Part-of-speech markers (<code>v.</code>, <code>n.</code>, <code>adj.</code>) noticeably improve translation quality.",
+      ".txt, PDF, or Word (.docx). One English word per line; part-of-speech markers (<code>v.</code>, <code>n.</code>, <code>adj.</code>) noticeably improve translation quality.",
 
     loadingTitle: "Processing your vocabulary...",
     loadingDesc: "One moment while DeepL translates your words...",
@@ -90,7 +90,7 @@ const translations = {
     errorDesc: "We couldn't process your file.",
     retryBtn: "Try Again",
 
-    errNotTxt: "Please upload a valid .txt file.",
+    errNotTxt: "Please upload a .txt, PDF, or Word (.docx) file.",
     errNoKey: "Enter your DeepL API key to continue.",
     errNetwork: "Network error. Check your connection and try again.",
     errGeneric: "An error occurred while processing the file.",

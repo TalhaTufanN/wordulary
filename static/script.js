@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (files.length === 0) return;
     const file = files[0];
 
-    if (!file.name.toLowerCase().endsWith(".txt")) {
+    if (!/\.(txt|pdf|docx)$/i.test(file.name)) {
       showError(t("errNotTxt"));
       return;
     }
