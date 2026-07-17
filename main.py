@@ -1,4 +1,3 @@
-import random
 import tkinter as tk
 from tkinter import filedialog
 from src.read_words_from_txt import read_words_from_txt
@@ -6,6 +5,19 @@ from src.translate_words import TranslationError, translate_words
 from src.create_word_list_pdf import create_word_list_pdf
 from src.generate_choices import generate_choices
 from src.create_quiz_pdf import create_pdf
+
+MIN_WORDS = 4  # coktan secmeli icin: 1 dogru + 3 celdirici
+
+
+def _dedupe(entries):
+    """Tekrarlari at (buyuk/kucuk harf duyarsiz), sirayi koru."""
+    seen, result = set(), []
+    for word, pos in entries:
+        key = word.strip().casefold()
+        if key and key not in seen:
+            seen.add(key)
+            result.append((word, pos))
+    return result
 
 def main():
     # Dosya seçme penceresi aç
@@ -24,10 +36,10 @@ def main():
     
     print(f"Seçilen dosya: {file_path}")
     print(f"Txt dosyası okunuyor...")
-    entries = read_words_from_txt(file_path)
+    entries = _dedupe(read_words_from_txt(file_path))
     print(f"Txt dosyası okundu...")
-    if len(entries) < 50:
-        print("En az 50 kelime içeren bir dosya ekleyin.")
+    if len(entries) < MIN_WORDS:
+        print(f"En az {MIN_WORDS} farklı kelime içeren bir dosya ekleyin.")
         return
     print(f"Kelimeler çevriliyor...")
     try:
@@ -38,8 +50,9 @@ def main():
     print(f"Kelimeler çevrildi...")
     # Kelimeler ve anlamlar için PDF oluştur
     create_word_list_pdf(translations)
-    test_words = random.sample(list(translations.keys()), 50)  # 50 kelime seç
-    questions = {word: generate_choices(translations[word], list(translations.values())) for word in test_words}
+    # Quiz her kelime için bir soru
+    all_meanings = list(translations.values())
+    questions = {word: generate_choices(meaning, all_meanings) for word, meaning in translations.items()}
     create_pdf(questions)
 if __name__ == "__main__":
     main()

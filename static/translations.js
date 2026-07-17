@@ -3,7 +3,7 @@ const translations = {
     // Header
     heroTitle: "Wordulary",
     heroDesc:
-      "İngilizce kelime listenizi, Türkçe çevirili kelime kartlarına ve 50 soruluk teste anında dönüştürün.",
+      "İngilizce kelime listenizi, Türkçe çevirili kelime kartlarına ve çoktan seçmeli teste anında dönüştürün.",
 
     // API key
     keyLabel: "DeepL API Anahtarınız",
@@ -21,7 +21,7 @@ const translations = {
     uploadDesc: "Dosyanızı buraya sürükleyin veya seçmek için tıklayın.",
     uploadBtn: "Dosya Seç",
     uploadRules:
-      "Her satırda bir İngilizce kelime, en az 50 kelime. Kelime türü işaretleri (<code>v.</code>, <code>n.</code>, <code>adj.</code>) çeviriyi belirgin şekilde iyileştirir.",
+      "Her satırda bir İngilizce kelime. Kelime türü işaretleri (<code>v.</code>, <code>n.</code>, <code>adj.</code>) çeviriyi belirgin şekilde iyileştirir.",
 
     // States
     loadingTitle: "Kelimeleriniz işleniyor...",
@@ -49,7 +49,7 @@ const translations = {
   en: {
     heroTitle: "Wordulary",
     heroDesc:
-      "Turn your English word list into a Turkish vocabulary handout and a 50-question quiz, instantly.",
+      "Turn your English word list into a Turkish vocabulary handout and a multiple-choice quiz, instantly.",
 
     keyLabel: "Your DeepL API Key",
     keyHint:
@@ -65,7 +65,7 @@ const translations = {
     uploadDesc: "Drag & drop your text file here, or click to browse.",
     uploadBtn: "Browse Files",
     uploadRules:
-      "One English word per line, at least 50 words. Part-of-speech markers (<code>v.</code>, <code>n.</code>, <code>adj.</code>) noticeably improve translation quality.",
+      "One English word per line. Part-of-speech markers (<code>v.</code>, <code>n.</code>, <code>adj.</code>) noticeably improve translation quality.",
 
     loadingTitle: "Processing your vocabulary...",
     loadingDesc: "One moment while DeepL translates your words...",

@@ -1,7 +1,5 @@
 import os
-import random
 import re
-import shutil
 import tempfile
 import uuid
 
@@ -30,7 +28,9 @@ OUTPUT_DIRS = {
 SAFE_FILENAME = re.compile(r"^[A-Za-z0-9_-]+\.pdf$")
 
 MAX_UPLOAD_BYTES = 1 * 1024 * 1024  # 1 MB
-MIN_WORDS = 50  # Quiz 50 soruluk - bundan azi ile uretilemez.
+# Coktan secmeli bir soru icin en az 4 benzersiz kelime gerekir: 1 dogru cevap
+# + 3 celdirici. Liste bundan uzun olsun yeter - 50 zorunlu degil.
+MIN_WORDS = 4
 MAX_WORDS = 1000  # Patolojik bir dosya bir worker'i mesgul etmesin.
 
 # BYOK (bring your own key): herkese acik kurulumda her kullanici kendi DeepL
@@ -97,9 +97,17 @@ def process_file(
 
         # (kelime, tur) ciftleri - tur bilgisi anlam ayrimi icin kullaniliyor.
         entries = read_words_from_txt(temp_file_path)
+
+        # Tekrarlari at (buyuk/kucuk harf ve bosluk duyarsiz), ilk gorulme
+        # sirasini koru. Kelime sayisi kontrolu BENZERSIZ kelimeler uzerinden
+        # yapilmali: aksi halde "55 satir ama 45 benzersiz" bir dosya kontrolu
+        # gecer, sonra quiz uretiminde patlardi.
+        entries = _dedupe(entries)
+
         if len(entries) < MIN_WORDS:
             raise HTTPException(
-                status_code=400, detail=f"The file must contain at least {MIN_WORDS} words."
+                status_code=400,
+                detail=f"The file must contain at least {MIN_WORDS} distinct words.",
             )
         if len(entries) > MAX_WORDS:
             raise HTTPException(
@@ -113,10 +121,11 @@ def process_file(
 
         create_word_list_pdf(translations, file_name=word_list_name, output_dir=OUTPUT_DIRS["words"])
 
-        test_words = random.sample(list(translations.keys()), MIN_WORDS)
+        # Quiz her kelime icin bir soru - liste ne kadarsa quiz o kadar.
+        all_meanings = list(translations.values())
         questions = {
-            word: generate_choices(translations[word], list(translations.values()))
-            for word in test_words
+            word: generate_choices(meaning, all_meanings)
+            for word, meaning in translations.items()
         }
         create_pdf(questions, file_name=quiz_name, output_dir=OUTPUT_DIRS["quizzes"])
 
@@ -142,6 +151,19 @@ def process_file(
     finally:
         if os.path.exists(temp_file_path):
             os.remove(temp_file_path)
+
+
+def _dedupe(entries):
+    """Tekrar eden kelimeleri atar (buyuk/kucuk harf ve bosluk duyarsiz),
+    ilk gorulme sirasini korur. entries: (kelime, tur) ciftleri."""
+    seen = set()
+    result = []
+    for word, pos in entries:
+        key = word.strip().casefold()
+        if key and key not in seen:
+            seen.add(key)
+            result.append((word, pos))
+    return result
 
 
 def _scrub(text: str, secret: str | None) -> str:
