@@ -47,6 +47,28 @@ const translations = {
     errNetwork: "Ağ hatası. Bağlantınızı kontrol edip tekrar deneyin.",
     errGeneric: "Dosya işlenirken bir hata oluştu.",
 
+    // How it works
+    howTitle: "Nasıl çalışır?",
+    how1Title: "Listeni yükle",
+    how1Desc:
+      "Her satırda bir İngilizce kelime olan bir .txt, PDF veya Word dosyası. Ders kitabı listesini olduğu gibi atabilirsin.",
+    how2Title: "Türkçeye çevrilsin",
+    how2Desc:
+      "Kelime türü işaretleri (v., n., adj.) sayesinde doğru anlam seçilir. Bu yüzden çeviriler isabetli olur.",
+    how3Title: "İki PDF indir",
+    how3Desc:
+      "Baskıya hazır bir kelime listesi ve çoktan seçmeli bir test. Uzunluğu sen seçersin.",
+
+    // Example
+    exTitle: "Örnek",
+    exSub: "Küçük bir liste ne veriyor, gör:",
+    exInLabel: "Yüklediğin liste",
+    exWordsLabel: "Kelime listesi PDF",
+    exQuizLabel: "Test PDF",
+    exNote:
+      'Not: bağlamsız çeviride "litter" çoğu araçta "litre" olur. Kelime türü işaretiyle Wordulary doğru anlamı seçer.',
+    exDownload: "Örnek listeyi indir (.txt)",
+
     // Footer
     footerPrivacy: "Gizlilik",
     footerSource: "Kaynak Kodu",
@@ -94,6 +116,28 @@ const translations = {
     errNoKey: "Enter your DeepL API key to continue.",
     errNetwork: "Network error. Check your connection and try again.",
     errGeneric: "An error occurred while processing the file.",
+
+    // How it works
+    howTitle: "How it works",
+    how1Title: "Upload your list",
+    how1Desc:
+      "A .txt, PDF, or Word file with one English word per line. Drop in a coursebook list as-is.",
+    how2Title: "Get it translated",
+    how2Desc:
+      "Part-of-speech markers (v., n., adj.) pick the right sense, so the translations land accurately.",
+    how3Title: "Download two PDFs",
+    how3Desc:
+      "A print-ready vocabulary list and a multiple-choice quiz. You choose the length.",
+
+    // Example
+    exTitle: "Example",
+    exSub: "See what a small list gives you:",
+    exInLabel: "Your list",
+    exWordsLabel: "Vocabulary PDF",
+    exQuizLabel: "Quiz PDF",
+    exNote:
+      'Note: without context, "litter" comes out as "litre" in most tools. With the part-of-speech marker, Wordulary picks the right meaning.',
+    exDownload: "Download a sample list (.txt)",
 
     footerPrivacy: "Privacy",
     footerSource: "Source",

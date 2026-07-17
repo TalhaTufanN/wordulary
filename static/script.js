@@ -219,4 +219,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
   resetBtn.addEventListener("click", resetUI);
   retryBtn.addEventListener("click", resetUI);
+
+  // ── Örnek liste indirme ───────────────────────────────────────────────────
+  // Dosyasi olmayan biri hemen deneyebilsin. Anlam ayrimini gosteren kelimeler
+  // (baglamsiz cevride yanlis cikanlar) + tur isaretleri.
+  const sampleBtn = document.getElementById("sample-btn");
+  if (sampleBtn) {
+    const sample = [
+      "litter n.", "mayor n.", "audit v.", "bail n.", "watch n.",
+      "run v.", "book v.", "match n.", "fine adj.", "conduct v.",
+      "notebook n.", "distinct adj.", "divorce n.", "abandon v.", "spouse n.",
+      "generation n.", "reasonable adj.", "register v.", "receipt n.", "regret v.",
+    ].join("\n") + "\n";
+    sampleBtn.addEventListener("click", () => {
+      const blob = new Blob([sample], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "wordulary-ornek.txt";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+  }
 });

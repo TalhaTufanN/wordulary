@@ -243,6 +243,81 @@
         </div>
       </section>
 
+      <!-- Nasıl çalışır -->
+      <section class="how-section">
+        <h2 class="section-title" data-i18n="howTitle">Nasıl çalışır?</h2>
+        <div class="how-steps">
+          <div class="how-step">
+            <div class="how-num">1</div>
+            <h3 data-i18n="how1Title">Listeni yükle</h3>
+            <p data-i18n="how1Desc">
+              Her satırda bir İngilizce kelime olan bir .txt, PDF veya Word
+              dosyası. Ders kitabı listesini olduğu gibi atabilirsin.
+            </p>
+          </div>
+          <div class="how-step">
+            <div class="how-num">2</div>
+            <h3 data-i18n="how2Title">Türkçeye çevrilsin</h3>
+            <p data-i18n="how2Desc">
+              Kelime türü işaretleri (v., n., adj.) sayesinde doğru anlam
+              seçilir. Bu yüzden çeviriler isabetli olur.
+            </p>
+          </div>
+          <div class="how-step">
+            <div class="how-num">3</div>
+            <h3 data-i18n="how3Title">İki PDF indir</h3>
+            <p data-i18n="how3Desc">
+              Baskıya hazır bir kelime listesi ve çoktan seçmeli bir test.
+              Uzunluğu sen seçersin.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Örnek girdi → çıktı -->
+      <section class="example-section">
+        <h2 class="section-title" data-i18n="exTitle">Örnek</h2>
+        <p class="section-sub" data-i18n="exSub">
+          Küçük bir liste ne veriyor, gör:
+        </p>
+        <div class="example-grid">
+          <div class="ex-card">
+            <div class="ex-label" data-i18n="exInLabel">Yüklediğin liste</div>
+            <pre class="ex-pre">litter n.
+mayor n.
+audit v.
+bail n.
+watch n.</pre>
+          </div>
+          <div class="ex-arrow" aria-hidden="true">→</div>
+          <div class="ex-card">
+            <div class="ex-label" data-i18n="exWordsLabel">Kelime listesi PDF</div>
+            <pre class="ex-pre">litter — çöp
+mayor — belediye başkanı
+audit — denetim
+bail — kefalet
+watch — saat</pre>
+          </div>
+          <div class="ex-card">
+            <div class="ex-label" data-i18n="exQuizLabel">Test PDF</div>
+            <pre class="ex-pre">1) litter
+A) saat   B) çöp
+C) kefalet   D) denetim
+
+2) mayor
+A) belediye başkanı
+B) çöp   C) saat   D) kefalet</pre>
+          </div>
+        </div>
+        <p class="example-note" data-i18n="exNote">
+          Not: bağlamsız çeviride "litter" çoğu araçta "litre" olur. Kelime türü
+          işaretiyle Wordulary doğru anlamı seçer.
+        </p>
+        <button type="button" id="sample-btn" class="btn-secondary" data-i18n="exDownload">
+          Örnek listeyi indir (.txt)
+        </button>
+      </section>
+
       <footer class="footer">
         <a href="/privacy/" data-i18n="footerPrivacy">Gizlilik</a>
         <span class="footer-sep">·</span>
