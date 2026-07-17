@@ -28,7 +28,10 @@ OUTPUT_DIRS = {
 # surucu harfi iceren hicbir sey buradan gecemez.
 SAFE_FILENAME = re.compile(r"^[A-Za-z0-9_-]+\.pdf$")
 
-MAX_UPLOAD_BYTES = 5 * 1024 * 1024  # 5 MB (PDF/Word .txt'ten agir olabilir)
+MAX_UPLOAD_BYTES = 10 * 1024 * 1024  # 10 MB. _save_upload dosyayi 64KB'lik
+# parcalar halinde okur ve bu siniri asinca keser, yani buyuk dosya (10GB dahi)
+# hicbir zaman tamamen bellege alinmaz. nginx client_max_body_size (12m) bir
+# ust katman: cok buyuk istekleri uygulamaya hic ulasmadan reddeder.
 # Coktan secmeli bir soru icin en az 4 benzersiz kelime gerekir: 1 dogru cevap
 # + 3 celdirici. Liste bundan uzun olsun yeter - 50 zorunlu degil.
 MIN_WORDS = 4
