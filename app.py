@@ -4,7 +4,7 @@ import tempfile
 import uuid
 
 from fastapi import FastAPI, File, Header, HTTPException, UploadFile
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
 from src.create_quiz_pdf import create_pdf
@@ -56,15 +56,38 @@ async def get_config():
     return {"require_user_key": REQUIRE_USER_KEY}
 
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 async def get_index():
-    return FileResponse(os.path.join(BASE_DIR, "static", "index.html"))
+    return _render_html("index.html")
 
 
-@app.get("/privacy/")
-@app.get("/privacy")
+@app.get("/privacy/", response_class=HTMLResponse)
+@app.get("/privacy", response_class=HTMLResponse)
 async def get_privacy():
-    return FileResponse(os.path.join(BASE_DIR, "static", "privacy.html"))
+    return _render_html("privacy.html")
+
+
+def _render_html(name):
+    """HTML'i döndürür, /static/ referanslarına dosya değişince değişen bir
+    versiyon parametresi ekler.
+
+    Cloudflare statik .js/.css dosyalarini 4 saat cache'ler ama HTML sayfalarini
+    (DYNAMIC) cache'lemez. Yani HTML her zaman taze gelir; ona gomulu linke dosya
+    mtime'ini eklersek, bir asset degistiginde URL degisir ve Cloudflare taze
+    kopyayi ceker. Deploy sonrasi elle cache temizleme gerekmez.
+    """
+    html = open(os.path.join(BASE_DIR, "static", name), encoding="utf-8").read()
+
+    def versioned(match):
+        asset = match.group(1)
+        try:
+            mtime = int(os.path.getmtime(os.path.join(BASE_DIR, "static", asset)))
+        except OSError:
+            return match.group(0)
+        return f"/static/{asset}?v={mtime}"
+
+    html = re.sub(r"/static/([A-Za-z0-9_.-]+)", versioned, html)
+    return HTMLResponse(html)
 
 
 # NOT: bu endpoint bilerek `def` (async degil). Icindeki ceviri ve PDF uretimi
