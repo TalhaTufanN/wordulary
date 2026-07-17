@@ -17,6 +17,11 @@
     <link rel="icon" type="image/png" href="/static/favicon.png" />
     <link rel="apple-touch-icon" href="/static/apple-touch-icon.png" />
     <link rel="stylesheet" href="/static/style.css" />
+    <script>
+      // Temayı body render edilmeden uygula (yanıp sönmeyi önler).
+      if (localStorage.getItem("wordulary_theme") === "dark")
+        document.documentElement.setAttribute("data-theme", "dark");
+    </script>
   </head>
   <body>
     <div class="background-mesh">
@@ -25,9 +30,14 @@
       <div class="blob blob-3"></div>
     </div>
 
-    <button id="lang-btn" class="lang-btn" type="button" aria-label="Language">
-      TR
-    </button>
+    <div class="top-controls">
+      <button id="theme-btn" class="ctrl-btn" type="button" aria-label="Tema">
+        🌙
+      </button>
+      <button id="lang-btn" class="ctrl-btn" type="button" aria-label="Language">
+        TR
+      </button>
+    </div>
 
     <main class="container">
       <header class="header">
@@ -57,8 +67,7 @@
             Çeviri için kendi DeepL anahtarınızı kullanırsınız.
             <a href="https://www.deepl.com/pro-api" target="_blank" rel="noopener"
               >Ücretsiz anahtar alın</a
-            >
-            — ayda 500.000 karakter, binlerce kelime listesine yeter.
+            >, ayda 500.000 karakter, binlerce kelime listesine yeter.
           </p>
           <input
             type="password"
@@ -303,11 +312,11 @@ watch n.</pre>
           <div class="ex-arrow" aria-hidden="true">→</div>
           <div class="ex-card">
             <div class="ex-label" data-i18n="exWordsLabel">Kelime listesi PDF</div>
-            <pre class="ex-pre">litter — çöp
-mayor — belediye başkanı
-audit — denetim
-bail — kefalet
-watch — saat</pre>
+            <pre class="ex-pre">litter → çöp
+mayor → belediye başkanı
+audit → denetim
+bail → kefalet
+watch → saat</pre>
           </div>
           <div class="ex-card">
             <div class="ex-label" data-i18n="exQuizLabel">Test PDF</div>

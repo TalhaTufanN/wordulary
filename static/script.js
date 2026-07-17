@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const retryBtn = document.getElementById("retry-btn");
   const errorMessage = document.getElementById("error-message");
   const langBtn = document.getElementById("lang-btn");
+  const themeBtn = document.getElementById("theme-btn");
 
   let requireUserKey = false;
 
@@ -58,6 +59,23 @@ document.addEventListener("DOMContentLoaded", () => {
   langBtn.addEventListener("click", () => {
     setLanguage((localStorage.getItem(LANG_STORAGE) || "tr") === "tr" ? "en" : "tr");
   });
+
+  // ── Tema (açık / koyu) ────────────────────────────────────────────────────
+  const THEME_STORAGE = "wordulary_theme";
+  function applyTheme(theme) {
+    const dark = theme === "dark";
+    document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+    localStorage.setItem(THEME_STORAGE, dark ? "dark" : "light");
+    // Butonda bir sonraki temanın ikonu: koyudayken güneş, açıktayken ay.
+    if (themeBtn) themeBtn.textContent = dark ? "☀️" : "🌙";
+  }
+  applyTheme(localStorage.getItem(THEME_STORAGE) || "light");
+  if (themeBtn) {
+    themeBtn.addEventListener("click", () => {
+      const now = document.documentElement.getAttribute("data-theme");
+      applyTheme(now === "dark" ? "light" : "dark");
+    });
+  }
 
   // ── API anahtari ────────────────────────────────────────────────────────
   // Sunucu BYOK modunda mi? Degilse (self-host) alan hic gosterilmez.

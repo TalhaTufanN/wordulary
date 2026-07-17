@@ -8,7 +8,7 @@ const translations = {
     // API key
     keyLabel: "DeepL API Anahtarınız",
     keyHint:
-      'Çeviri için kendi DeepL anahtarınızı kullanırsınız. <a href="https://www.deepl.com/pro-api" target="_blank" rel="noopener">Ücretsiz anahtar alın</a> — ayda 500.000 karakter, binlerce kelime listesine yeter.',
+      'Çeviri için kendi DeepL anahtarınızı kullanırsınız. <a href="https://www.deepl.com/pro-api" target="_blank" rel="noopener">Ücretsiz anahtar alın</a>, ayda 500.000 karakter, binlerce kelime listesine yeter.',
     keyPlaceholder: "Örn: 12345678-abcd-...:fx",
     keyRemember: "Bu cihazda hatırla",
     keyPrivacy:
@@ -81,7 +81,7 @@ const translations = {
 
     keyLabel: "Your DeepL API Key",
     keyHint:
-      'Translation runs on your own DeepL key. <a href="https://www.deepl.com/pro-api" target="_blank" rel="noopener">Get a free one</a> — 500,000 characters a month covers thousands of word lists.',
+      'Translation runs on your own DeepL key. <a href="https://www.deepl.com/pro-api" target="_blank" rel="noopener">Get a free one</a>, 500,000 characters a month covers thousands of word lists.',
     keyPlaceholder: "e.g. 12345678-abcd-...:fx",
     keyRemember: "Remember on this device",
     keyPrivacy:

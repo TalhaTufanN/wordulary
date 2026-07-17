@@ -10,7 +10,12 @@
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap"
       rel="stylesheet"
     />
+    <link rel="icon" type="image/png" href="/static/favicon.png" />
     <link rel="stylesheet" href="/static/style.css" />
+    <script>
+      if (localStorage.getItem("wordulary_theme") === "dark")
+        document.documentElement.setAttribute("data-theme", "dark");
+    </script>
     <style>
       body {
         align-items: flex-start;
@@ -82,9 +87,14 @@
       <div class="blob blob-2"></div>
     </div>
 
-    <button id="lang-btn" class="lang-btn" type="button" aria-label="Language">
-      TR
-    </button>
+    <div class="top-controls">
+      <button id="theme-btn" class="ctrl-btn" type="button" aria-label="Tema">
+        🌙
+      </button>
+      <button id="lang-btn" class="ctrl-btn" type="button" aria-label="Language">
+        TR
+      </button>
+    </div>
 
     <main class="container">
       <a href="/" class="back" data-i18n="backHome">← Wordulary'a dön</a>
@@ -136,14 +146,14 @@
           <p>
             "Bu cihazda hatırla" seçeneğini işaretlerseniz anahtarınız
             <strong>yalnızca kendi tarayıcınızın</strong> yerel deposunda
-            (<code>localStorage</code>) saklanır — bize gönderilmez, orada kalmaz.
+            (<code>localStorage</code>) saklanır, bize gönderilmez, orada kalmaz.
             "Kayıtlı anahtarı sil" ile istediğiniz an kaldırabilirsiniz.
           </p>
 
           <h2>Yüklediğiniz dosya</h2>
           <p>
             <code>.txt</code> dosyanız işlenmek üzere geçici olarak diske yazılır
-            ve <strong>istek biter bitmez silinir</strong> — başarılı olsun ya da
+            ve <strong>istek biter bitmez silinir</strong>: başarılı olsun ya da
             olmasın. Dosyanızın içeriği saklanmaz, analiz edilmez, üçüncü
             taraflarla paylaşılmaz.
           </p>
@@ -154,14 +164,14 @@
             adlarla oluşturulur ve <strong>kısa süre sonra otomatik olarak
             silinir</strong>. Bağlantılar tahmin edilemez olduğu için başkalarının
             sizin dosyalarınıza ulaşması pratikte mümkün değildir, ancak bunlar
-            gizli belgeler için tasarlanmamıştır — indirdikten sonra saklamanızı
+            gizli belgeler için tasarlanmamıştır, indirdikten sonra saklamanızı
             öneririz.
           </p>
 
           <h2>Üçüncü taraflar</h2>
           <ul>
             <li>
-              <strong>DeepL SE</strong> — kelimeleriniz çeviri için DeepL'e
+              <strong>DeepL SE</strong>: kelimeleriniz çeviri için DeepL'e
               gönderilir. Bu, sizin kendi anahtarınızla ve sizin DeepL ile olan
               anlaşmanız kapsamında gerçekleşir. DeepL'in gizlilik politikası:
               <a href="https://www.deepl.com/privacy" target="_blank" rel="noopener"
@@ -169,11 +179,11 @@
               >.
             </li>
             <li>
-              <strong>Google Fonts</strong> — sayfa yazı tipi Google'ın sunucularından
+              <strong>Google Fonts</strong>: sayfa yazı tipi Google'ın sunucularından
               yüklenir; bu sırada IP adresiniz Google'a görünür.
             </li>
             <li>
-              <strong>Cloudflare</strong> — sitemiz Cloudflare üzerinden sunulur;
+              <strong>Cloudflare</strong>: sitemiz Cloudflare üzerinden sunulur;
               güvenlik ve performans amacıyla standart bağlantı kayıtları tutar.
             </li>
           </ul>
@@ -189,7 +199,7 @@
           <h2>Kendi sunucunuzda çalıştırmak</h2>
           <p>
             Wordulary açık kaynaktır. Hiçbir şeyi bize göndermeden kendi
-            bilgisayarınızda çalıştırabilirsiniz —
+            bilgisayarınızda çalıştırabilirsiniz,
             <a
               href="https://github.com/TalhaTufanN/wordulary"
               target="_blank"
@@ -248,7 +258,7 @@
         <p>What happens to your key:</p>
         <ul>
           <li>It is sent from your browser to our server <strong>over HTTPS</strong>, in a request
-          header rather than the URL — URLs end up in server and proxy logs; headers do not.</li>
+          header rather than the URL, URLs end up in server and proxy logs; headers do not.</li>
           <li>On our server it exists only in memory, only for the life of that request.
           <strong>It is never written to a database, saved to disk, or cached.</strong></li>
           <li>It is <strong>scrubbed</strong> from error messages and logs, so even an unexpected
@@ -256,29 +266,29 @@
           <li>When the request ends, it is gone.</li>
         </ul>
         <p>If you tick "Remember on this device", your key is stored in
-        <strong>your own browser's</strong> local storage (<code>localStorage</code>) — it is not
+        <strong>your own browser's</strong> local storage (<code>localStorage</code>), it is not
         sent to us and does not persist on our side. You can remove it any time with
         "Forget saved key".</p>
 
         <h2>The file you upload</h2>
         <p>Your <code>.txt</code> file is written to disk temporarily so it can be processed, and is
-        <strong>deleted as soon as the request finishes</strong> — whether it succeeded or not. Its
+        <strong>deleted as soon as the request finishes</strong>: whether it succeeded or not. Its
         contents are not retained, analysed, or shared.</p>
 
         <h2>The PDFs we generate</h2>
         <p>Your vocabulary list and quiz are created on our server with unguessable random names and
         are <strong>deleted automatically a short time later</strong>. Because the links are
-        unguessable, others cannot practically reach your files — but these are not designed for
+        unguessable, others cannot practically reach your files, but these are not designed for
         confidential material, so download and keep what you need.</p>
 
         <h2>Third parties</h2>
         <ul>
-          <li><strong>DeepL SE</strong> — your words are sent to DeepL for translation. This happens
+          <li><strong>DeepL SE</strong>: your words are sent to DeepL for translation. This happens
           under your own key and your own agreement with DeepL. Their privacy policy:
           <a href="https://www.deepl.com/privacy" target="_blank" rel="noopener">deepl.com/privacy</a>.</li>
-          <li><strong>Google Fonts</strong> — the page font loads from Google's servers, which makes
+          <li><strong>Google Fonts</strong>: the page font loads from Google's servers, which makes
           your IP address visible to Google.</li>
-          <li><strong>Cloudflare</strong> — our site is served through Cloudflare, which keeps
+          <li><strong>Cloudflare</strong>: our site is served through Cloudflare, which keeps
           standard connection logs for security and performance.</li>
         </ul>
 
@@ -288,8 +298,8 @@
         preference and, if you choose, your DeepL key. Neither is sent to us.</p>
 
         <h2>Running it yourself</h2>
-        <p>Wordulary is open source. You can run it on your own machine and send us nothing at all —
-        <a href="https://github.com/TalhaTufanN/wordulary" target="_blank" rel="noopener">the
+        <p>Wordulary is open source. You can run it on your own machine and send nothing at all.
+        <a href="https://github.com/TalhaTufanN/wordulary" target="_blank" rel="noopener">The
         source is on GitHub</a>.</p>
 
         <h2>Contact</h2>
@@ -312,6 +322,21 @@
       setLanguage(localStorage.getItem("gwr_lang") || "tr");
       langBtn.addEventListener("click", () =>
         setLanguage((localStorage.getItem("gwr_lang") || "tr") === "tr" ? "en" : "tr"),
+      );
+
+      // Tema (açık / koyu)
+      const themeBtn = document.getElementById("theme-btn");
+      function applyTheme(theme) {
+        const dark = theme === "dark";
+        document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+        localStorage.setItem("wordulary_theme", dark ? "dark" : "light");
+        themeBtn.textContent = dark ? "☀️" : "🌙";
+      }
+      applyTheme(localStorage.getItem("wordulary_theme") || "light");
+      themeBtn.addEventListener("click", () =>
+        applyTheme(
+          document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark",
+        ),
       );
     </script>
   </body>
