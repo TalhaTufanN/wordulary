@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "=============================================="
-echo "       Starting TestMaker..."
+echo "       Starting Wordulary..."
 echo "=============================================="
 
 # Determine python command

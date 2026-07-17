@@ -1,7 +1,7 @@
 const translations = {
   tr: {
     // Header
-    heroTitle: "TestMaker",
+    heroTitle: "Wordulary",
     heroDesc:
       "İngilizce kelime listenizi, Türkçe çevirili kelime kartlarına ve 50 soruluk teste anında dönüştürün.",
 
@@ -47,7 +47,7 @@ const translations = {
   },
 
   en: {
-    heroTitle: "TestMaker",
+    heroTitle: "Wordulary",
     heroDesc:
       "Turn your English word list into a Turkish vocabulary handout and a 50-question quiz, instantly.",
 

@@ -1,6 +1,6 @@
 @echo off
 echo ==============================================
-echo        Starting TestMaker...
+echo        Starting Wordulary...
 echo ==============================================
 
 :: Check if Python is installed

@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // localStorage anahtari: kullanicinin DeepL anahtari YALNIZCA kendi
   // cihazinda, kendi istegiyle saklanir. Sunucuya sadece istek basligiyla
   // gider ve orada hicbir yere yazilmaz.
-  const KEY_STORAGE = "testmaker_deepl_key";
+  const KEY_STORAGE = "wordulary_deepl_key";
   const LANG_STORAGE = "gwr_lang";
 
   const uploadZone = document.getElementById("upload-zone");

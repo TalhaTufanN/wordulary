@@ -1,6 +1,6 @@
 <div align="center">
 
-# TestMaker
+# Wordulary
 
 **Turn a plain word list into a printable vocabulary sheet and a ready-to-use quiz — in one drop.**
 
@@ -9,7 +9,7 @@
 [![DeepL](https://img.shields.io/badge/DeepL-API-0F2B46?logo=deepl&logoColor=white)](https://www.deepl.com/pro-api)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-<img src="assets/HomeScreen.png" alt="TestMaker interface" width="720">
+<img src="assets/HomeScreen.png" alt="Wordulary interface" width="720">
 
 </div>
 
@@ -17,7 +17,7 @@
 
 ## What it does
 
-English teachers spend hours doing the same three things: translating a vocabulary list, formatting it into a handout, and writing a quiz from it. TestMaker collapses all three into a single file drop.
+English teachers spend hours doing the same three things: translating a vocabulary list, formatting it into a handout, and writing a quiz from it. Wordulary collapses all three into a single file drop.
 
 Give it a `.txt` file with one English word per line. It returns two print-ready PDFs:
 
@@ -43,7 +43,7 @@ Paste a list straight out of a coursebook or the Oxford 5000 — no cleanup need
 ### Project layout
 
 ```
-TestMaker/
+Wordulary/
 ├── app.py                       # FastAPI app — routes, upload handling, static mount
 ├── main.py                      # Legacy Tkinter desktop entry point (superseded by app.py)
 ├── src/
@@ -70,8 +70,8 @@ TestMaker/
 ### Setup
 
 ```bash
-git clone https://github.com/TalhaTufanN/english-turkish-vocab-quiz.git
-cd english-turkish-vocab-quiz
+git clone https://github.com/TalhaTufanN/wordulary.git
+cd wordulary
 pip install -r requirements.txt
 ```
 
@@ -125,7 +125,7 @@ The frontend is a thin client over these endpoints, documented interactively at 
 
 ## Roadmap
 
-TestMaker is being prepared for a public deployment at `testmaker.gwrlabs.com`. Getting there means changing how a few things work:
+Wordulary is being prepared for a public deployment at `wordulary.gwrlabs.com`. Getting there means changing how a few things work:
 
 - **Bring your own key** — the hosted version asks each user for their own DeepL key, used for that request and never stored. The self-hosted `.env` flow stays exactly as it is.
 - **Deployment** — nginx + systemd on the GWR Labs VPS.

@@ -15,14 +15,14 @@ from src.generate_choices import generate_choices
 from src.read_words_from_txt import read_words_from_txt
 from src.translate_words import TranslationError, translate_words
 
-app = FastAPI(title="TestMaker UI", description="Modern UI for the TestMaker Application")
+app = FastAPI(title="Wordulary UI", description="Modern UI for the Wordulary Application")
 
 # Uretilen PDF'lerin yazildigi dizinler. Mutlak yol - surecin nereden
 # baslatildigina bagli olmamali.
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_DIRS = {
-    "words": os.path.abspath(os.environ.get("TESTMAKER_WORDS_DIR", os.path.join(BASE_DIR, "words"))),
-    "quizzes": os.path.abspath(os.environ.get("TESTMAKER_QUIZZES_DIR", os.path.join(BASE_DIR, "quizzes"))),
+    "words": os.path.abspath(os.environ.get("WORDULARY_WORDS_DIR", os.path.join(BASE_DIR, "words"))),
+    "quizzes": os.path.abspath(os.environ.get("WORDULARY_QUIZZES_DIR", os.path.join(BASE_DIR, "quizzes"))),
 }
 
 # Uretilen dosya adlari icin izin verilen tek desen. Yol ayraci, '..' ve
@@ -39,7 +39,7 @@ MAX_WORDS = 1000  # Patolojik bir dosya bir worker'i mesgul etmesin.
 #
 # Kapaliyken (varsayilan) sunucu .env'deki anahtara duser; self-host ve lokal
 # gelistirme boylece hic degismeden calisir.
-REQUIRE_USER_KEY = os.environ.get("TESTMAKER_REQUIRE_USER_KEY", "").lower() in ("1", "true", "yes")
+REQUIRE_USER_KEY = os.environ.get("WORDULARY_REQUIRE_USER_KEY", "").lower() in ("1", "true", "yes")
 
 os.makedirs(os.path.join(BASE_DIR, "static"), exist_ok=True)
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
@@ -89,7 +89,7 @@ def process_file(
 
     # Yuklenen dosya adi kullaniciya ait - asla yol kurmakta kullanilmaz.
     # Sunucu tarafinda uretilen gecici bir ada yaziyoruz.
-    temp_fd, temp_file_path = tempfile.mkstemp(suffix=".txt", prefix="testmaker_")
+    temp_fd, temp_file_path = tempfile.mkstemp(suffix=".txt", prefix="wordulary_")
     os.close(temp_fd)
 
     try:
