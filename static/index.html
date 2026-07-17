@@ -94,6 +94,43 @@
           </p>
         </div>
 
+        <div id="quiz-count-section" class="quiz-count-section">
+          <label class="count-label" data-i18n="countLabel"
+            >Quiz soru sayısı</label
+          >
+          <div class="count-options" id="count-options">
+            <button type="button" class="count-btn" data-count="10">10</button>
+            <button type="button" class="count-btn" data-count="20">20</button>
+            <button type="button" class="count-btn" data-count="30">30</button>
+            <button type="button" class="count-btn" data-count="50">50</button>
+            <button
+              type="button"
+              class="count-btn active"
+              data-count="all"
+              data-i18n="countAll"
+            >
+              Tümü
+            </button>
+            <button
+              type="button"
+              class="count-btn"
+              data-count="custom"
+              data-i18n="countCustom"
+            >
+              Özel
+            </button>
+          </div>
+          <input
+            type="number"
+            id="count-custom"
+            class="count-custom hidden"
+            min="1"
+            max="1000"
+            data-i18n-placeholder="countCustomPlaceholder"
+            placeholder="Kaç soru?"
+          />
+        </div>
+
         <div id="upload-zone" class="upload-zone">
           <input type="file" id="file-input" accept=".txt" hidden />
           <div class="upload-content">

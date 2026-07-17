@@ -489,6 +489,66 @@ body {
   color: var(--success);
 }
 
+/* Quiz question-count selector */
+.quiz-count-section {
+  margin-bottom: 2rem;
+}
+
+.count-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+
+.count-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.count-btn {
+  flex: 1 1 auto;
+  min-width: 52px;
+  padding: 0.6rem 0.9rem;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--card-border);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.count-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.count-btn.active {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 4px 14px 0 rgba(139, 92, 246, 0.39);
+}
+
+.count-custom {
+  width: 100%;
+  margin-top: 0.6rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--card-border);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease;
+}
+
+.count-custom:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+}
+
 /* Upload rules */
 .upload-rules {
   margin-top: 1.25rem;

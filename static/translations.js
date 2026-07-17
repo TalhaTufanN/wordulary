@@ -16,6 +16,12 @@ const translations = {
     keyForget: "Kayıtlı anahtarı sil",
     keyForgotten: "Anahtar bu cihazdan silindi.",
 
+    // Quiz question count
+    countLabel: "Quiz soru sayısı",
+    countAll: "Tümü",
+    countCustom: "Özel",
+    countCustomPlaceholder: "Kaç soru?",
+
     // Upload
     uploadTitle: ".txt dosyanızı yükleyin",
     uploadDesc: "Dosyanızı buraya sürükleyin veya seçmek için tıklayın.",
@@ -60,6 +66,12 @@ const translations = {
       "Your key is used only to translate this request. We never store, save, or log it.",
     keyForget: "Forget saved key",
     keyForgotten: "Key removed from this device.",
+
+    // Quiz question count
+    countLabel: "Quiz length",
+    countAll: "All",
+    countCustom: "Custom",
+    countCustomPlaceholder: "How many?",
 
     uploadTitle: "Upload your .txt file",
     uploadDesc: "Drag & drop your text file here, or click to browse.",

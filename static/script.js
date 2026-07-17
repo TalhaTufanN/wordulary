@@ -15,6 +15,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const keyRemember = document.getElementById("key-remember");
   const keyForget = document.getElementById("key-forget");
 
+  const quizCountSection = document.getElementById("quiz-count-section");
+  const countOptions = document.getElementById("count-options");
+  const countCustom = document.getElementById("count-custom");
+
   const loadingState = document.getElementById("loading-state");
   const successState = document.getElementById("success-state");
   const errorState = document.getElementById("error-state");
@@ -96,6 +100,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // ── Quiz soru sayisi secici ───────────────────────────────────────────────
+  // Secili deger "all" | "10" | "20" ... veya "custom" (o zaman input'tan okunur).
+  let selectedCount = "all";
+
+  countOptions.addEventListener("click", (e) => {
+    const btn = e.target.closest(".count-btn");
+    if (!btn) return;
+    countOptions.querySelectorAll(".count-btn").forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    selectedCount = btn.dataset.count;
+    countCustom.classList.toggle("hidden", selectedCount !== "custom");
+    if (selectedCount === "custom") countCustom.focus();
+  });
+
+  function currentQuestionCount() {
+    if (selectedCount !== "custom") return selectedCount;
+    const n = parseInt(countCustom.value, 10);
+    return Number.isFinite(n) && n > 0 ? String(n) : "all";
+  }
+
   // ── Dosya secme / surukleme ─────────────────────────────────────────────
   browseBtn.addEventListener("click", () => fileInput.click());
   uploadZone.addEventListener("click", (e) => {
@@ -142,6 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
       el.classList.add("hidden"),
     );
     uploadRules.classList.toggle("hidden", stateElement !== uploadZone);
+    quizCountSection.classList.toggle("hidden", stateElement !== uploadZone);
     keySection.classList.toggle(
       "hidden",
       !requireUserKey || stateElement !== uploadZone,
@@ -160,6 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("question_count", currentQuestionCount());
 
     // Anahtar HEADER ile gider - query string'ler sunucu ve proxy loglarina duser.
     const headers = {};

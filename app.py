@@ -1,9 +1,10 @@
 import os
+import random
 import re
 import tempfile
 import uuid
 
-from fastapi import FastAPI, File, Header, HTTPException, UploadFile
+from fastapi import FastAPI, File, Form, Header, HTTPException, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -101,6 +102,7 @@ def _render_html(name):
 def process_file(
     file: UploadFile = File(...),
     x_deepl_api_key: str | None = Header(default=None),
+    question_count: str = Form(default="all"),
 ):
     user_key = (x_deepl_api_key or "").strip() or None
 
@@ -142,13 +144,19 @@ def process_file(
         word_list_name = f"word_list_{uuid.uuid4().hex}.pdf"
         quiz_name = f"quiz_{uuid.uuid4().hex}.pdf"
 
+        # Kelime listesi PDF'i HER ZAMAN tum kelimeleri icerir - ogretmen
+        # hepsini ogretir; quiz uzunlugu ayri bir tercih.
         create_word_list_pdf(translations, file_name=word_list_name, output_dir=OUTPUT_DIRS["words"])
 
-        # Quiz her kelime icin bir soru - liste ne kadarsa quiz o kadar.
+        # Quiz soru sayisi kullanici tercihine gore. Celdiriciler yine TUM
+        # cevirilerden secilir (havuz genis olsun), quiz alt kume olsa bile.
         all_meanings = list(translations.values())
+        count = _parse_question_count(question_count, len(translations))
+        quiz_items = list(translations.items())
+        if count < len(quiz_items):
+            quiz_items = random.sample(quiz_items, count)
         questions = {
-            word: generate_choices(meaning, all_meanings)
-            for word, meaning in translations.items()
+            word: generate_choices(meaning, all_meanings) for word, meaning in quiz_items
         }
         create_pdf(questions, file_name=quiz_name, output_dir=OUTPUT_DIRS["quizzes"])
 
@@ -174,6 +182,20 @@ def process_file(
     finally:
         if os.path.exists(temp_file_path):
             os.remove(temp_file_path)
+
+
+def _parse_question_count(raw, available):
+    """Quiz soru sayisi tercihini cozer. 'all'/bos/gecersiz -> tum kelimeler.
+    Sayi ise 1 ile mevcut kelime sayisi arasina kirpilir (fazla istenirse
+    kelime sayisina duser)."""
+    raw = (raw or "").strip().lower()
+    if raw in ("", "all", "tümü", "tumu", "hepsi"):
+        return available
+    try:
+        n = int(raw)
+    except ValueError:
+        return available
+    return max(1, min(n, available))
 
 
 def _dedupe(entries):
