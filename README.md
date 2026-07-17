@@ -50,11 +50,11 @@ upload (.txt / .pdf / .docx)
    └─ Vocabulary list PDF  +  Quiz PDF (with plausible distractors)
 ```
 
-- **Backend** — [FastAPI](https://fastapi.tiangolo.com/), serving the API and the static frontend from one process. Translation and PDF work run in a threadpool so one slow job never blocks the server.
-- **Translation** — the official [DeepL client](https://github.com/DeepLcom/deepl-python), chosen over cheaper engines because vocabulary-level accuracy *is* the product. Words are grouped by part of speech and each group is batched with a context that names the word type.
-- **Extraction** — `.txt` is read line by line; PDF (via [pypdf](https://pypdf.readthedocs.io/)) and Word (via [python-docx](https://python-docx.readthedocs.io/)) anchor on the POS marker to separate words from pronunciation, definitions, and page noise.
-- **PDF generation** — [FPDF](https://pyfpdf.github.io/fpdf2/) with a manual two-column layout and DejaVu Sans (open-licensed, full Turkish coverage), paginated with auto-fit font sizing.
-- **Frontend** — vanilla HTML/CSS/JS. No build step, no framework, no `node_modules`.
+- **Backend**: [FastAPI](https://fastapi.tiangolo.com/), serving the API and the static frontend from one process. Translation and PDF work run in a threadpool so one slow job never blocks the server.
+- **Translation**: the official [DeepL client](https://github.com/DeepLcom/deepl-python), chosen over cheaper engines because vocabulary-level accuracy *is* the product. Words are grouped by part of speech and each group is batched with a context that names the word type.
+- **Extraction**: `.txt` is read line by line; PDF (via [pypdf](https://pypdf.readthedocs.io/)) and Word (via [python-docx](https://python-docx.readthedocs.io/)) anchor on the POS marker to separate words from pronunciation, definitions, and page noise.
+- **PDF generation**: [FPDF](https://pyfpdf.github.io/fpdf2/) with a manual two-column layout and DejaVu Sans (open-licensed, full Turkish coverage), paginated with auto-fit font sizing.
+- **Frontend**: vanilla HTML/CSS/JS. No build step, no framework, no `node_modules`.
 
 ### Project layout
 
